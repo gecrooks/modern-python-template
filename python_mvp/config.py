@@ -19,9 +19,9 @@ try:  # pragma: no cover
     from importlib.metadata import version  # type: ignore
 except ImportError:  # pragma: no cover   # type: ignore
     # python == 3.7
-    from importlib.metadata import PackageNotFoundError  # type: ignore
-    from importlib.metadata import requires  # type: ignore
-    from importlib.metadata import version  # type: ignore
+    from importlib_metadata import PackageNotFoundError  # type: ignore
+    from importlib_metadata import requires  # type: ignore
+    from importlib_metadata import version  # type: ignore
 
 
 __all__ = ["__version__", "about"]
