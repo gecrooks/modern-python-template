@@ -159,11 +159,11 @@ setup_requires =
 dev =
     pytest
     pytest-cov
-	flake8
-	mypy
-	sphinx
-	sphinxcontrib-bibtex
-	twine
+    flake8
+    mypy
+    sphinx
+    sphinxcontrib-bibtex
+    twine
     setupext-janitor
     setuptools_scm    
 ```
@@ -490,23 +490,23 @@ On branch gec001-init
 Changes to be committed:
   (use "git reset HEAD <file>..." to unstage)
 
-	new file:   .readthedocs.yml
-	new file:   .travis.yml
-	new file:   Makefile
-	modified:   README.md
-	new file:   docs/Makefile
-	new file:   docs/_build/.gitignore
-	new file:   docs/_static/.gitignore
-	new file:   docs/_templates/.gitignore
-	new file:   docs/conf.py
-	new file:   docs/index.rst
-	new file:   pyproject.toml
-	new file:   python_mvp/__init__.py
-	new file:   python_mvp/about.py
+    new file:   .readthedocs.yml
+    new file:   .travis.yml
+    new file:   Makefile
+    modified:   README.md
+    new file:   docs/Makefile
+    new file:   docs/_build/.gitignore
+    new file:   docs/_static/.gitignore
+    new file:   docs/_templates/.gitignore
+    new file:   docs/conf.py
+    new file:   docs/index.rst
+    new file:   pyproject.toml
+    new file:   python_mvp/__init__.py
+    new file:   python_mvp/about.py
     new file:   python_mvp/config.py
-	new file:   python_mvp/config_test.py
-	new file:   setup.cfg
-	new file:   setup.py
+    new file:   python_mvp/config_test.py
+    new file:   setup.cfg
+    new file:   setup.py
     
 $ git commit -m "Minimum viable package"
 ...
