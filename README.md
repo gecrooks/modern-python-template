@@ -215,11 +215,11 @@ from .config import __version__ as __version__                      # noqa: F401
 ```
 We put the code to extract the version number in `config.py` and not `__init__.py`, because we don't want to pollute our top level package namespace. 
 
-The various pragmas in the code above ("pragma: no cover" and "type: ignore" are there because the conditional import needed for python 3.7 compatibility confuses both our type checker and code coverage tools.
+The various pragmas in the code above ("pragma: no cover" and "type: ignore") are there because the conditional import needed for python 3.7 compatibility confuses both our type checker and code coverage tools.
 
 ## about
 
-One of my tricks is to add a main function in `python_mvp/about.py` to print the versions of the core upstream dependencies. This can be extremely helpful when debugging configuration or system dependent bugs, particularly when running continuous integration tests. 
+One of my tricks is to add a function  to print the versions of the core upstream dependencies. This can be extremely helpful when debugging configuration or system dependent bugs, particularly when running continuous integration tests. 
 
 ```
 # Configuration (> python -m python_mvp.about)
