@@ -17,7 +17,7 @@ $ pip install -e .[dev]
 
 ## About: On the creation and crafting of a python project
 
-This is a minimal template for an open source, github hosted, python package.
+This is discussion of the steps needed to setup an open source, github hosted, python package, ready for further development.
 
 ## Naming
 
@@ -25,10 +25,10 @@ The first decision to make is the name of the project. And for python packages t
 
 ## License
 
-The next decision is which of the plethora of [Open Source](https://opensource.org/licenses) licenses to use. We'll use the [Apache License](https://opensource.org/licenses/Apache-2.0), a perfectly reasonable choice, and increasingly popular choice. 
+The next decision is which of the plethora of [Open Source](https://opensource.org/licenses) licenses to use. We'll use the [Apache License](https://opensource.org/licenses/Apache-2.0), a perfectly reasonable, and increasingly popular choice. 
 
 
-## Create github repo
+## Create repo
 
 Next we need to initialize a git repo. It's easiest to create the repo on github and clone to our local machine (This way we don't have to mess around setting the origin and such like). Github will helpfully add a `README.md`, the license, and a python `.gitignore` for us. (I'll add `.DS_Store` to the ignore file latter. This is a hidden directory that Mac OS adds all over the place.)
 
@@ -243,9 +243,9 @@ It's important that `about.py` isn't imported by any other code in the package, 
 
 ## Unit tests
 
-Way back when I worked as a commercial programmer, the two most important things I learned were source control, and unit tests. Both were largely unknown in the academic world at the time. 
+Way back when I worked as a commercial programmer, the two most important things I learned were source control and unit tests. Both were largely unknown in the academic world at the time. 
 
-(I was once talking to a chap who was developing a new experimental platform. The plan was to build several dozens of these things, and sell them to other research groups so they didn't have to build their own. A couple of grad students wandered in. They were working with one of the prototypes, and they'd found some minor bug. Oh yes, says the chap, who goes over to his computer, pulls up the relevant file, edits the code, and gives the students a new version of that file. He didn't run any tests. There were no unit tests. And there was no source control, so there was no record of the change he'd just made. That was it. The horror.)
+(I was once talking to a chap who was developing a new experimental platform. The plan was to build several dozens of these things, and sell them to other research groups so they didn't have to build their own. A couple of grad students wandered in. They were working with one of the prototypes, and they'd found some minor bug. Oh yes, says the chap, who goes over to his computer, pulls up the relevant file, edits the code, and gives the students a new version of that file. He didn't run any tests, because there were no tests. And there was no source control, so there was no record of the change he'd just made. That was it. The horror.)
 
 The two main options for unit tests appear to be `unittest` from the standard libraray and `pytest`. To me `unittest` feels very javonic. There's a lot of boiler plate code and I believe it's a direct descendant of an early java unit testing framework. Pytest, on the other hand, feels more pythonic. In the basic case all we have to do is to write functions (whose names are prefixed with 'test_'), within which we test code with `asserts`. Easy.
 
@@ -286,7 +286,9 @@ In tests we want to access our code in the same way we would access it from the 
 
 ## Test coverage
 
-We want to monitor the test coverage. At a bare minimum the unit tests should run all the code. The [pytest-cov](https://pypi.org/project/pytest-cov/) plugin to pytest will do this for us. Configuration is placed in the setup.cfg file (Config can also be placed in a seperate `.coveragerc`, but I think its better to avoid a proliferation of configuration files.)
+At a bare minimum the unit tests should run (almost) every line of code. If a line of code never runs, then how do you know it works at all?
+
+So we want to monitor the test coverage. The [pytest-cov](https://pypi.org/project/pytest-cov/) plugin to pytest will do this for us. Configuration is placed in the setup.cfg file (Config can also be placed in a seperate `.coveragerc`, but I think its better to avoid a proliferation of configuration files.)
 ```
 # pytest configuration
 [tool:pytest]
@@ -316,6 +318,8 @@ exclude_lines =
 
 We have to explicitly omit the unit tests since we have placed the test files in the same directories as the code to test.
 
+The pragam "pragma: no cover" is used to mark untestable lines. This often happens with conditional imports used for backwards compatibility between python versions. 
+
 
 ## Linting
 
@@ -326,13 +330,17 @@ We need to lint our code before pushing any commits. I like [flake8](https://fla
     Two spaces thou shall not use. 
     And tabs are right out. 
 
-Four spaces is standard. [Tabs are evil](https://www.emacswiki.org/emacs/TabsAreEvil). I've worked on a project with 2-space indents, and I see the appeal, but I found it really weird (Although maybe that's just lack of exposure.)
+Four spaces is standard. [Tabs are evil](https://www.emacswiki.org/emacs/TabsAreEvil). I've worked on a project with 2-space indents, and I see the appeal, but I found it really weird. 
 
-Most of flake8's defaults are perfectly reasonable and in line with [PEP8](https://www.python.org/dev/peps/pep-0008/) guidance. But even [Linus](https://lkml.org/lkml/2020/5/29/1038) agrees that the old standard of 80 columns of text is too restrictive. The configuration also lives in `setup.cfg`.
+Most of flake8's defaults are perfectly reasonable and in line with [PEP8](https://www.python.org/dev/peps/pep-0008/) guidance. But even [Linus](https://lkml.org/lkml/2020/5/29/1038) agrees that the old standard of 80 columns of text is too restrictive. (Allegedly, 2-space indents was [Google's](https://www.youtube.com/watch?v=wf-BqAjZb8M&feature=youtu.be&t=260) solution to the problem that 80 character lines are too short. Just make the indents smaller!) Raymond Hettinger suggests 90ish (without a hard cutoff), and [black](https://black.readthedocs.io/en/stable/the_black_code_style.html) uses 88. So let's try 88.
+
+
+The configuration also lives in `setup.cfg`.
 ```
 # flake8 linter configuration
 [flake8]
-max-line-length = 99
+max-line-length = 88
+ignore = E203, W503
 ```
 We need to override the linter on occasion. We add pragma such as `# noqa: F401` to assert that no, really, in this case we do know what we're doing.
 
@@ -593,9 +601,9 @@ $ git push
 
 7.) Over on github, create a pull request to merge into the master branch
 
-8.) Wait for the integration tests to pass. If they don't, fix them, and then go back to step 1.
+8.) Wait for the integration tests to pass. If they don't, fix them, and then go back to step 4.
 
-9.) Squash and merge into the master branch on github. Squashing merges all of our commits on the branch into a single commit to merge into the master branch. We generally don't want to pollute the master repo history with lots of micro commits. (On multi-developer projects, code should be reviewed. Somebody other than the branch author approves the changes before the final merge into master. )
+9.) Squash and merge into the master branch on github. Squashing merges all of our commits on the branch into a single commit to merge into the master branch. We generally don't want to pollute the master repo history with lots of micro commits. (On multi-developer projects, code should be reviewed. Somebody other than the branch author approves the changes before the final merge into master.)
 
 10.) Goto step 1. Back on our local machine, we resync master, create a new branch, and continue developing. 
 
@@ -616,6 +624,6 @@ $ python -m twine upload dist/*
 
 ## Conclusion
 
-By my count we have 13 configuration files (In python, toml, yaml, INI, gitignore, and Makefile formats), 3 documentation files (including the license), one file of unit tests, and 3 (short) files of code (With 31 lines of code). We're now ready to create a new git branch and start coding in earnest.
+By my count we have 14 configuration files (In python, toml, yaml, INI, gitignore, Makefile, and plain text formats), 2 documentation files, one file of unit tests, and 3 files of code (containing 31 lines of code). We're now ready to create a new git branch and start coding in earnest.
 
 
