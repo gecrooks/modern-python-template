@@ -1,4 +1,3 @@
-
 # Copyright 2019-, Gavin E. Crooks and contributors
 #
 # This source code is licensed under the Apache License, Version 2.0 found in
@@ -15,22 +14,22 @@ import platform
 
 try:
     # python >= 3.8
-    from importlib.metadata import PackageNotFoundError, requires, version      # type: ignore
-except ImportError:                                                             # pragma: no cover
+    from importlib.metadata import PackageNotFoundError, requires, version  # type: ignore
+except ImportError:  # pragma: no cover
     # python == 3.7
-    from importlib_metadata import PackageNotFoundError, requires, version      # type: ignore
+    from importlib_metadata import PackageNotFoundError, requires, version  # type: ignore
 
 
 __all__ = ["__version__", "about"]
 
 
-package_name = 'python_mvp'
+package_name = "python_mvp"
 
 try:
     __version__ = version(package_name)
-except PackageNotFoundError:    # pragma: no cover
+except PackageNotFoundError:  # pragma: no cover
     # package is not installed
-    __version__ = '?.?.?'
+    __version__ = "?.?.?"
 
 
 def about(file: typing.TextIO = None) -> None:
@@ -43,19 +42,19 @@ def about(file: typing.TextIO = None) -> None:
     """
     name_width = 24
     versions = {}
-    versions['platform'] = platform.platform(aliased=True)
+    versions["platform"] = platform.platform(aliased=True)
     versions[package_name] = __version__
-    versions['python'] = sys.version[0:5]
+    versions["python"] = sys.version[0:5]
 
     for req in requires(package_name):
-        name = re.split('[; =><]', req)[0]
+        name = re.split("[; =><]", req)[0]
         try:
             versions[name] = version(name)
-        except PackageNotFoundError:    # pragma: no cover
+        except PackageNotFoundError:  # pragma: no cover
             pass
 
     print(file=file)
-    print('# Configuration (> python -m python_mvp.about)', file=file)
+    print("# Configuration (> python -m python_mvp.about)", file=file)
     for name, vers in versions.items():
         print(name.ljust(name_width), vers, file=file)
     print(file=file)

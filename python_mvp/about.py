@@ -9,6 +9,7 @@
 # NB: This module should not be imported by any other code in the package
 # (else we will get multiple import warnings)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import python_mvp
+
     python_mvp.about()

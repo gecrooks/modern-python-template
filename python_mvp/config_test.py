@@ -1,4 +1,3 @@
-
 # Copyright 2019-, Gavin E. Crooks and contributors
 #
 # This source code is licensed under the Apache License, Version 2.0 found in
@@ -22,14 +21,14 @@ def test_about():
 
 
 def test_about_main():
-    rval = subprocess.call(['python', '-m', 'python_mvp.about'])
+    rval = subprocess.call(["python", "-m", "python_mvp.about"])
     assert rval == 0
 
 
 def test_copyright():
     """Check that source code files contain a copyright line"""
-    exclude = set(['python_mvp/version.py'])
-    for fname in glob.glob('python_mvp/**/*.py', recursive=True):
+    exclude = set(["python_mvp/version.py"])
+    for fname in glob.glob("python_mvp/**/*.py", recursive=True):
         if fname in exclude:
             continue
         print("Checking " + fname + " for copyright header")
@@ -38,5 +37,5 @@ def test_copyright():
             for line in f.readlines():
                 if not line.strip():
                     continue
-                assert line.startswith('# Copyright')
+                assert line.startswith("# Copyright")
                 break
