@@ -12,12 +12,16 @@ import typing
 import re
 import platform
 
-try:
+try:  # pragma: no cover
     # python >= 3.8
-    from importlib.metadata import PackageNotFoundError, requires, version  # type: ignore
-except ImportError:  # pragma: no cover
+    from importlib.metadata import PackageNotFoundError  # type: ignore
+    from importlib.metadata import requires  # type: ignore
+    from importlib.metadata import version  # type: ignore
+except ImportError:  # pragma: no cover   # type: ignore
     # python == 3.7
-    from importlib_metadata import PackageNotFoundError, requires, version  # type: ignore
+    from importlib.metadata import PackageNotFoundError  # type: ignore
+    from importlib.metadata import requires  # type: ignore
+    from importlib.metadata import version  # type: ignore
 
 
 __all__ = ["__version__", "about"]

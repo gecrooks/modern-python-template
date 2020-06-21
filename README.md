@@ -188,18 +188,22 @@ My favored approach is use git tags as the source of truth (Option 7 in the abov
 The convention is that the version number of a python packages should be available as `packagename.__version__`. 
 So we add the following code to `python_mvp/config.py` to extract the version number metadata.
 ```
-try:
+try:  # pragma: no cover
     # python >= 3.8
-    from importlib.metadata import PackageNotFoundError, requires, version      # type: ignore
-except ImportError:                                                             # pragma: no cover
+    from importlib.metadata import PackageNotFoundError  # type: ignore
+    from importlib.metadata import requires  # type: ignore
+    from importlib.metadata import version  # type: ignore
+except ImportError:  # pragma: no cover  # type: ignore
     # python == 3.7
-    from importlib_metadata import PackageNotFoundError, requires, version      # type: ignore
+    from importlib.metadata import PackageNotFoundError  # type: ignore
+    from importlib.metadata import requires  # type: ignore
+    from importlib.metadata import version  # type: ignore
 
 package_name = 'python_mvp'
 
 try:
     __version__ = version(package_name)
-except PackageNotFoundError:    # pragma: no cover
+except PackageNotFoundError:  # pragma: no cover
     # package is not installed
     __version__ = '?.?.?'
 
@@ -211,6 +215,7 @@ from .config import __version__ as __version__                      # noqa: F401
 ```
 We put the code to extract the version number in `config.py` and not `__init__.py`, because we don't want to pollute our top level package namespace. 
 
+The various pragmas in the code above ("pragma: no cover" and "type: ignore" are there because the conditional import needed for python 3.7 compatibility confuses both our type checker and code coverage tools.
 
 ## about
 
