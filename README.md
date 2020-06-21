@@ -1,4 +1,4 @@
-# "python-mvp: Minimal Viable Product for an open source, github hosted, python package"
+# python-mvp: Minimal Viable Product for an open source, github hosted, python package
 
 
 [![Build Status](https://travis-ci.org/gecrooks/python-mvp.svg?branch=master)](https://travis-ci.org/gecrooks/python-mvp) [![Documentation Status](https://readthedocs.org/projects/python-mvp/badge/?version=latest)](https://python-mvp.readthedocs.io/en/latest/?badge=latest)
