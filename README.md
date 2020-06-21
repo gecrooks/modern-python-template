@@ -626,6 +626,13 @@ $ python setup.py sdist bdist_wheel
 $ python -m twine upload dist/*
 ```
 
+## Miscellaneous
+
+On travis, it's a good idea to set a cron job to run the test suite against the main branch on a regular basis. This will alert you of problems caused by your dependencies updating. (For instance, one of my other projects just broke, apparently because flake8 updated it's rules.) You have to have the main branch setup for travis first, before you can set this up. 
+
+On Github, add a description, website url (typically pointing at readthedocs), and project tags. And review the rest of githubs settings. 
+
+Other python tools to consider using include [black, The uncompromising code formatter](https://black.readthedocs.io/en/stable/), and [isort](https://pypi.org/project/isort/) which will sort your import statements into canonical order. 
 
 ## Conclusion
 
