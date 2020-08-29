@@ -17,7 +17,7 @@ $ pip install -e .[dev]
 
 ## About: On the creation and crafting of a python project
 
-This is discussion of the steps needed to setup an open source, github hosted, python package, ready for further development.
+This is discussion of the steps needed to setup an open source, github hosted, python package ready for further development.
 
 ## Naming
 
@@ -52,7 +52,7 @@ Now we clone the repo locally.
     remote: Compressing objects: 100% (3/3), done.
     remote: Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
     Unpacking objects: 100% (4/4), done.
-    (QC) $ cd python-mvp    
+    (QC) $ cd python-mvp
 ```
 
 Lets tag this initial commit for posterities sake (And so I can [link](https://github.com/gecrooks/python-mvp/releases/tag/v0.0.0) to the code at this instance).
@@ -93,7 +93,7 @@ import setuptools
 if __name__ == "__main__":
     setuptools.setup(use_scm_version=True)
 ```
-The only addition is `use_scm_version=True`, which activates versioning with git tags. More on that anon. Don't forget to set executable permissions on the setup.py script.
+Our only addition is `use_scm_version=True`, which activates versioning with git tags. More on that anon. Don't forget to set executable permissions on the setup.py script.
 ```
  $ chmod a+x setup.py
 ```
@@ -138,7 +138,7 @@ classifiers=
     Topic :: Software Development :: Libraries
     Topic :: Software Development :: Libraries :: Python Modules
     Programming Language :: Python :: 3
-    Programming Language :: Python :: 3.7    
+    Programming Language :: Python :: 3.7
     Programming Language :: Python :: 3.8
     Operating System :: OS Independent
 
@@ -165,7 +165,7 @@ dev =
     sphinxcontrib-bibtex
     twine
     setupext-janitor
-    setuptools_scm    
+    setuptools_scm
 ```
 
 It's good practice to support at least two consecutive versions of python. But for new projects it's not unreasonable to support only the latest stable python version. 
@@ -173,17 +173,17 @@ It's good practice to support at least two consecutive versions of python. But f
 We can now install our package (as editable -e, so that the code in our repo is live).
 ```
    $ pip install -e .[dev] 
-```   
+``` 
 The optional `[dev]` will install all of the extra packages we need for test and development, listed under `[options.extras_require]` above.
 
 
 
 ## Versioning
-Our project needs a version number (e.g. '3.1.4'). We'll try and follow the [semantic versioning](https://semver.org/) conventions. So as long as the major version number is '0' we're allowed to break things.
+Our project needs a version number (e.g. '3.1.4'). We'll try and follow the [semantic versioning](https://semver.org/) conventions. But as long as the major version number is '0' we're allowed to break things.
 
 There should be a 
 [single source of truth](https://packaging.python.org/guides/single-sourcing-package-version/) for this number.
-My favored approach is use git tags as the source of truth (Option 7 in the above linked list).  We're going to tag releases anyways, so if we also hard code the version number into the python code we'd violate the single source of truth principle. We use the [setuptools_scm](https://github.com/pypa/setuptools_scm) package to automatically construct a version number from the latest git tag during installation. 
+My favored approach is use git tags as the source of truth (Option 7 in the above linked list). We're going to tag releases anyways, so if we also hard code the version number into the python code we'd violate the single source of truth principle. We use the [setuptools_scm](https://github.com/pypa/setuptools_scm) package to automatically construct a version number from the latest git tag during installation.
 
 The convention is that the version number of a python packages should be available as `packagename.__version__`. 
 So we add the following code to `python_mvp/config.py` to extract the version number metadata.
@@ -219,7 +219,7 @@ The various pragmas in the code above ("pragma: no cover" and "type: ignore") ar
 
 ## about
 
-One of my tricks is to add a function  to print the versions of the core upstream dependencies. This can be extremely helpful when debugging configuration or system dependent bugs, particularly when running continuous integration tests. 
+One of my tricks is to add a function to print the versions of the core upstream dependencies. This can be extremely helpful when debugging configuration or system dependent bugs, particularly when running continuous integration tests.
 
 ```
 # Configuration (> python -m python_mvp.about)
@@ -248,13 +248,13 @@ It's important that `about.py` isn't imported by any other code in the package, 
 
 ## Unit tests
 
-Way back when I worked as a commercial programmer, the two most important things I learned were source control and unit tests. Both were largely unknown in the academic world at the time. 
+Way back when I worked as a commercial programmer, the two most important things that I learned were source control and unit tests. Both were largely unknown in the academic world at the time.
 
-(I was once talking to a chap who was developing a new experimental platform. The plan was to build several dozens of these things, and sell them to other research groups so they didn't have to build their own. A couple of grad students wandered in. They were working with one of the prototypes, and they'd found some minor bug. Oh yes, says the chap, who goes over to his computer, pulls up the relevant file, edits the code, and gives the students a new version of that file. He didn't run any tests, because there were no tests. And there was no source control, so there was no record of the change he'd just made. That was it. The horror.)
+(I was once talking to a chap who was developing a new experimental platform. The plan was to build several dozens of these gadgets, and sell them to other research groups so they didn't have to build their own. A couple of grad students wandered in. They were working with one of the prototypes, and they'd found some minor bug. Oh yes, says the chap, who goes over to his computer, pulls up the relevant file, edits the code, and gives the students a new version of that file. He didn't run any tests, because there were no tests. And there was no source control, so there was no record of the change he'd just made. That was it. The horror.)
 
-The two main options for unit tests appear to be `unittest` from the standard libraray and `pytest`. To me `unittest` feels very javonic. There's a lot of boiler plate code and I believe it's a direct descendant of an early java unit testing framework. Pytest, on the other hand, feels more pythonic. In the basic case all we have to do is to write functions (whose names are prefixed with 'test_'), within which we test code with `asserts`. Easy.
+Currently, the two main options for python unit tests appear to be `unittest` from the standard library and `pytest`. To me `unittest` feels very javonic. There's a lot of boiler plate code and I believe it's a direct descendant of an early java unit testing framework. Pytest, on the other hand, feels pythonic. In the basic case all we have to do is to write functions (whose names are prefixed with 'test_'), within which we test code with `asserts`. Easy.
 
-There's two common ways to organize tests. Either we place tests in a separate directory, or they live in the main package along with the rest of the code. In the past I've used the former approach. It keeps the test organized and separate from the production code. But I'm going to try the second approach for this project. The big advantage is that the unit tests for a piece of code live right next to the code being tested.
+There's two common ways to organize tests. Either we place tests in a separate directory, or they live in the main package along with the rest of the code. In the past I've used the former approach. It keeps the test organized and separate from the production code. But I'm going to try the second approach for this project. The advantage is that the unit tests for a piece of code live right next to the code being tested.
 
 Let's test that we can access the version number (There is no piece of code too trivial that it shouldn't have a unit test.) In `python_mvp/config_test.py` we add
 
@@ -397,16 +397,16 @@ extensions = [
     'sphinx.ext.napoleon',
 ]
 ```
-[Autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html) automatically extracts documentation form docstrings, and [napolean](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html) enables [Google style](http://google.github.io/styleguide/pyguide.html) python docstrings.
+[Autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html) automatically extracts documentation from docstrings, and [napolean](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html) enables [Google style](http://google.github.io/styleguide/pyguide.html) python docstrings.
 
 We also add a newline at the end of `conf.py`, since the lack of a blank line at the end upsets our linter.
 
-Go ahead and give it a whirl. This won't do anything much interesting yet, but it's a start.
+Go ahead and give it a whirl. This won't do anything interesting yet, but it's a start.
 ```
 $ make html
 ```
 
-One problem is that sphinx creates three (initially) empty directories, `_build`, `_static`, and `_templates`. But we can't add empty directories to git. Git only tracks files. The trick is to add an empty `.gitignore` files to each of these directories. But we don't want to add any other files from `_build`, so that directory needs to be explicitly listed in the master `.gitignore` (Which github has already done for us, so we have to add the '-f' force option to git add).
+One problem is that sphinx creates three (initially) empty directories, `_build`, `_static`, and `_templates`. But we can't add empty directories to git, since git only tracks files. The workaround is to add an empty `.gitignore` file to each of these directories. But we don't want to add any other files from `_build`, so that directory needs to be explicitly listed in the master `.gitignore` (Which github has already done for us, so we have to add the '-f' force option to git add).
 
 ```
 $ touch _templates/.gitignore _build/.gitignore _static/.gitignore
@@ -418,7 +418,7 @@ $ git add Makefile *.*
 
 
 ## Makefile
-I like to add a Makefile with targets for all of the common development tools I need to run. This is partially for convenience, and partially as documentation, i.e. here are all the commands you need to run to test, lint, typecheck and build the code (and so on.) I use a [cleaver hack](https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html) so that the makefile self documents. 
+I like to add a Makefile with targets for all of the common development tools I need to run. This is partially for convenience, and partially as documentation, i.e. here are all the commands you need to run to test, lint, typecheck, and build the code (and so on.) I use a [clever hack](https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html) so that the makefile self documents.
 
 ```
 (QC) $ make
@@ -437,7 +437,7 @@ build        Setuptools build
 clean        Clean up after setuptools
 ```
 
-The pragmas target searches the code and lists all of the pragmas that occur. Common uses of [pragmas](https://en.wikipedia.org/wiki/Directive_(programming)) are to override the linter, or tester, or typechecker. I also tend to scatter other keywords throughout my code: TODO (For things that need doing), FIXME (For code that's broken, but I can't fix right this moment), DOCME (code that needs more documentation, and TESTME (for code that needs more tests). In principle, production code shouldn't have these pragmas. Either the problem should be fixed, or if it can't be immediately fixed, it should become a github issue. 
+The pragmas target searches the code and lists all of the pragmas that occur. Common uses of [pragmas](https://en.wikipedia.org/wiki/Directive_(programming)) are to override the linter, tester, or typechecker. I also tend to scatter other keywords throughout my code: TODO (For things that need doing), FIXME (For code that's broken, but I can't fix right this moment), DOCME (code that needs more documentation), and TESTME (for code that needs more tests). In principle, production code shouldn't have these pragmas. Either the problem should be fixed, or if it can't be immediately fixed, it should become a github issue. 
 
 
 ## Readthedocs
@@ -457,7 +457,7 @@ I've already got a readthedocs account, so setting up a new project takes but a 
 
 We add some basic information and installation instructions to `README.mb`. Github displays this file on your project home page (but under the file list, so if you have a lot of files at the top level of your project, people might not notice your README.)
 
-A handy trick is to add Build Status and Documentation Status badges for travis and readthedocs. These will proudly declare that your tests are passing (hopefully).  (See top of this file)
+A handy trick is to add Build Status and Documentation Status badges for travis and readthedocs. These will proudly declare that your tests are passing (hopefully). (See top of this file)
 
 
 ## Continuous Integration
@@ -486,7 +486,7 @@ script:
   - mypy
   - sphinx-build -M html docs docs/_build
 ```
-Note that these tests are picky. Not only must the unit tests pass, but test coverage must be 100%, the code must delinted and properly typed, and the docs have to build without error.  
+Note that these tests are picky. Not only must the unit tests pass, but test coverage must be 100%, the code must be delinted and properly typed, and the docs have to build without error.
 
 Let's add, commit, and push our changes. 
 ```
@@ -518,7 +518,7 @@ $ git commit -m "Minimum viable package"
 $ git push --set-upstream origin gec001-init
 ...
 ```
-If all goes well travis will see our push to github, and build and test the code in the branch. (You may have to make a pull request for travis to see this first test attempt) Probably all the tests won't pass on the first try. It's easy to forget something (which is why we have automatic tests). So tweak the code, and push another commit until the tests pass.
+If all goes well travis will see our push to github, and build and test the code in the branch (You may have to make a pull request for travis to see this first test attempt). Probably all the tests won't pass on the first try. It's easy to forget something (which is why we have automatic tests). So tweak the code, and push another commit until the tests pass.
 
 
 
@@ -572,7 +572,7 @@ The full developer sequence goes something like this
 $ git checkout master
 $ git pull origin master
 ```
-(If we're working on somebody else's project, this step is a little more complicated. We fork the project on github, clone our fork to the local machine, and then set git's 'upstream' to be the original repo. We then sync out local master branch with the upstream master branch
+(If we're working on somebody else's project, this step is a little more complicated. We fork the project on github, clone our fork to the local machine, and then set git's 'upstream' to be the original repo. We then sync our local master branch with the upstream master branch
 ```
 $ git checkout master
 $ git fetch upstream
@@ -628,7 +628,7 @@ $ python -m twine upload dist/*
 
 ## Miscellaneous
 
-On travis, it's a good idea to set a cron job to run the test suite against the main branch on a regular basis. This will alert you of problems caused by your dependencies updating. (For instance, one of my other projects just broke, apparently because flake8 updated it's rules.) You have to have the main branch setup for travis first, before you can set this up. 
+On travis, it's a good idea to set a cron job to run the test suite against the main branch on a regular basis. This will alert you of problems caused by your dependencies updating. (For instance, one of my other projects just broke, apparently because flake8 updated it's rules.) You have to have the main branch setup for travis first before you can set this up.
 
 On Github, add a description, website url (typically pointing at readthedocs), and project tags. And review the rest of githubs settings. 
 
