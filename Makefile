@@ -20,11 +20,24 @@ coverage:	## Report test coverage using current backend
 	pytest --disable-pytest-warnings --cov
 	@echo
 
-lint:		## Delint python source
-	flake8
+lint:		## Lint check python source
+	@echo
+	isort --check -m 3 --tc $(PROJECT)  || echo "FAILED isort!"
+	@echo
+	black --diff --color $(PROJECT)  || echo "FAILED black"
+	@echo
+	flake8 $(FILES)  || echo "FAILED flake8"
+	@echo
+
+delint:   ## Run isort and black to delint project
+	@echo	
+	isort -m 3 --tc $(PROJECT)
+	@echo
+	black $(PROJECT)
+	@echo
 
 typecheck:	## Static typechecking 
-	mypy
+	mypy $(PROJECT)
 
 docs:		## Build documentation
 	(cd docs; make html)
@@ -76,7 +89,7 @@ status:  ## git status -uno
 build: ## Setuptools build
 	./setup.py clean --all
 	./setup.py sdist bdist_wheel
-	
+
 
 clean: ## Clean up after setuptools
 	./setup.py clean --all

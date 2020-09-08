@@ -7,10 +7,10 @@
 Package wide configuration
 """
 
+import platform
+import re
 import sys
 import typing
-import re
-import platform
 
 try:  # pragma: no cover
     # python >= 3.8

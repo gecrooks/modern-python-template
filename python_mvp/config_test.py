@@ -3,29 +3,29 @@
 # This source code is licensed under the Apache License, Version 2.0 found in
 # the LICENSE.txt file in the root directory of this source tree.
 
-import io
 import glob
+import io
 import subprocess
 
 import python_mvp
 
 
-def test_version():
+def test_version() -> None:
     assert python_mvp.__version__
 
 
-def test_about():
+def test_about() -> None:
     out = io.StringIO()
     python_mvp.about(out)
     print(out)
 
 
-def test_about_main():
+def test_about_main() -> None:
     rval = subprocess.call(["python", "-m", "python_mvp.about"])
     assert rval == 0
 
 
-def test_copyright():
+def test_copyright() -> None:
     """Check that source code files contain a copyright line"""
     exclude = set(["python_mvp/version.py"])
     for fname in glob.glob("python_mvp/**/*.py", recursive=True):
