@@ -12,16 +12,12 @@ import re
 import sys
 import typing
 
-try:  # pragma: no cover
+try:
     # python >= 3.8
-    from importlib.metadata import PackageNotFoundError  # type: ignore
-    from importlib.metadata import requires  # type: ignore
-    from importlib.metadata import version  # type: ignore
-except ImportError:  # pragma: no cover   # type: ignore
+    from importlib import metadata as importlib_metadata  # type: ignore
+except ImportError:  # pragma: no cover
     # python == 3.7
-    from importlib_metadata import PackageNotFoundError  # type: ignore
-    from importlib_metadata import requires  # type: ignore
-    from importlib_metadata import version  # type: ignore
+    import importlib_metadata  # type: ignore  # noqa: F401
 
 
 __all__ = ["__version__", "about"]
@@ -30,8 +26,8 @@ __all__ = ["__version__", "about"]
 package_name = "python_mvp"
 
 try:
-    __version__ = version(package_name)
-except PackageNotFoundError:  # pragma: no cover
+    __version__ = importlib_metadata.version(package_name)
+except importlib_metadata.PackageNotFoundError:  # pragma: no cover
     # package is not installed
     __version__ = "?.?.?"
 
@@ -50,11 +46,11 @@ def about(file: typing.TextIO = None) -> None:
     versions[package_name] = __version__
     versions["python"] = sys.version[0:5]
 
-    for req in requires(package_name):
+    for req in importlib_metadata.requires(package_name):
         name = re.split("[; =><]", req)[0]
         try:
-            versions[name] = version(name)
-        except PackageNotFoundError:  # pragma: no cover
+            versions[name] = importlib_metadata.version(name)
+        except importlib_metadata.PackageNotFoundError:  # pragma: no cover
             pass
 
     print(file=file)

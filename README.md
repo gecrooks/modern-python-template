@@ -406,7 +406,7 @@ Go ahead and give it a whirl. This won't do anything interesting yet, but it's a
 $ make html
 ```
 
-One problem is that sphinx creates three (initially) empty directories, `_build`, `_static`, and `_templates`. But we can't add empty directories to git, since git only tracks files. The workaround is to add an empty `.gitignore` file to each of these directories. But we don't want to add any other files from `_build`, so that directory needs to be explicitly listed in the master `.gitignore` (Which github has already done for us, so we have to add the '-f' force option to git add).
+One problem is that sphinx creates three (initially) empty directories, `_build`, `_static`, and `_templates`. But we can't add empty directories to git, since git only tracks files. The workaround is to add an empty `.gitignore` file to each of the `_static` and `_templates` directories. (Sphinx will create the `_build` directory when it needs it.)
 
 ```
 $ touch _templates/.gitignore _build/.gitignore _static/.gitignore
@@ -425,7 +425,8 @@ I like to add a Makefile with targets for all of the common development tools I 
 all          Run all tests
 test         Run unittests
 coverage     Report test coverage using current backend
-lint         Delint python source
+lint         Lint check python source
+delint       Run isort and black to delint project
 typecheck    Static typechecking 
 docs         Build documentation
 docs-open    Build documentation and open in webbrowser
@@ -632,7 +633,7 @@ On travis, it's a good idea to set a cron job to run the test suite against the 
 
 On Github, add a description, website url (typically pointing at readthedocs), and project tags. And review the rest of githubs settings. 
 
-Other python tools to consider using include [black, The uncompromising code formatter](https://black.readthedocs.io/en/stable/), and [isort](https://pypi.org/project/isort/) which will sort your import statements into canonical order. 
+Other python tools to consider using include [black, The uncompromising code formatter](https://black.readthedocs.io/en/stable/), and [isort](https://pypi.org/project/isort/) which will sort your import statements into canonical order. The command `make delint` will run these tools on your code, with the right magic incantations so that isort and black are compatible.
 
 ## Conclusion
 
