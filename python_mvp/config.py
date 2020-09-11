@@ -27,7 +27,7 @@ package_name = "python_mvp"
 
 try:
     __version__ = importlib_metadata.version(package_name)  # type: ignore
-except importlib_metadata.PackageNotFoundError:  # pragma: no cover # type: ignore
+except Exception:  # pragma: no cover
     # package is not installed
     __version__ = "?.?.?"
 
@@ -50,7 +50,7 @@ def about(file: typing.TextIO = None) -> None:
         name = re.split("[; =><]", req)[0]
         try:
             versions[name] = importlib_metadata.version(name)  # type: ignore
-        except importlib_metadata.PackageNotFoundError:  # pragma: no cover # type: ignore
+        except Exception:  # pragma: no cover
             pass
 
     print(file=file)
