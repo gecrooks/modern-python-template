@@ -7,9 +7,6 @@
 Package wide configuration
 """
 
-
-
-
 import platform
 import re
 import sys
