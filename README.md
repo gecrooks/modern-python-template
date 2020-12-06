@@ -1,7 +1,7 @@
 # python-mvp: Minimal Viable Product for an open source, github hosted, python package
 
 
-[![Build Status](https://travis-ci.org/gecrooks/python-mvp.svg?branch=master)](https://travis-ci.org/gecrooks/python-mvp) [![Documentation Status](https://readthedocs.org/projects/python-mvp/badge/?version=latest)](https://python-mvp.readthedocs.io/en/latest/?badge=latest)
+![Build Status](https://github.com/gecrooks/python-mvp/workflows/Python%20package/badge.svg) [![Documentation Status](https://readthedocs.org/projects/python-mvp/badge/?version=latest)](https://python-mvp.readthedocs.io/en/latest/?badge=latest)
 
 [Source](https://github.com/gecrooks/python-mvp)
 
@@ -432,7 +432,7 @@ I like to add a Makefile with targets for all of the common development tools I 
 (MVP) $ make
 all          Run all tests
 test         Run unittests
-coverage     Report test coverage using current backend
+coverage     Report test coverage
 lint         Lint check python source
 delint       Run isort and black to delint project
 typecheck    Static typechecking 
@@ -466,34 +466,62 @@ I've already got a readthedocs account, so setting up a new project takes but a 
 
 We add some basic information and installation instructions to `README.mb`. Github displays this file on your project home page (but under the file list, so if you have a lot of files at the top level of your project, people might not notice your README.)
 
-A handy trick is to add Build Status and Documentation Status badges for travis and readthedocs. These will proudly declare that your tests are passing (hopefully). (See top of this file)
+A handy trick is to add Build Status and Documentation Status badges for Github actions tests and readthedocs. These will proudly declare that your tests are passing (hopefully). (See top of this file)
 
 
 ## Continuous Integration
 
 Another brilliant advance to software engineering practice is continuous integration (CI). The basic idea is that all code gets thoroughly tested before it's added to the master branch.
 
-I use [travis-ci](https://travis-ci.org/). I already have travis setup and hooked into my github, so it only takes a few clicks to setup a new project. We need a `.travis.yml` configuration file (in [yaml](https://yaml.org/) format).
+Github now makes this very easy to setup with Github actions. They even provcide basic templates. This testing workflow lives in `.github/workflows/python-package.yml`, and is a modification of Github's  `python-package` workflow.
 ```
-calanguage: python
-sudo: required
-dist: xenial
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-python:
-  - "3.8"
+name: Python package
 
-before_install:
-  - pip install -U pip
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
-install:
-  - pip install .[dev]  # install package + test dependencies
+jobs:
+  build:
 
-script:
-  - python -m python_mvp.about
-  - python -m pytest --cov=python_mvp --cov-fail-under 100
-  - flake8
-  - mypy
-  - sphinx-build -M html docs docs/_build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.7', '3.8']
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        python -m pip install -e .[dev]  # install package + test dependencies
+    - name: About
+      run: |
+        python -m python_mvp.about
+    - name: Lint with flake8
+      run: |
+        flake8 .
+    - name: Test with pytest
+      run: |
+        python -m pytest --cov=python_mvp --cov-fail-under 100
+    - name: Typecheck with mypy
+      run: |
+        mypy python_mvp
+    - name: Build documentation with sphinx
+      run: |
+        sphinx-build -M html docs docs/_build
+
 ```
 Note that these tests are picky. Not only must the unit tests pass, but test coverage must be 100%, the code must be delinted and properly typed, and the docs have to build without error.
 
@@ -505,7 +533,7 @@ Changes to be committed:
   (use "git reset HEAD <file>..." to unstage)
 
     new file:   .readthedocs.yml
-    new file:   .travis.yml
+    new file:   .github/workflows/python-package.yml
     new file:   Makefile
     modified:   README.md
     new file:   docs/Makefile
@@ -527,7 +555,7 @@ $ git commit -m "Minimum viable package"
 $ git push --set-upstream origin gec001-init
 ...
 ```
-If all goes well travis will see our push to github, and build and test the code in the branch (You may have to make a pull request for travis to see this first test attempt). Probably all the tests won't pass on the first try. It's easy to forget something (which is why we have automatic tests). So tweak the code, and push another commit until the tests pass.
+If all goes well Github will see our push, and build and test the code in the branch. Probably all the tests won't pass on the first try. It's easy to forget something (which is why we have automatic tests). So tweak the code, and push another commit until the tests pass.
 
 
 
@@ -572,7 +600,7 @@ Setuptools has a clean command to remove build files, but it doesn't actually do
 
 ## Merge and Tag
 
-Over on github we create a pull request, wait for travis to give us the green light once all the tests have passed, and then squash and merge. 
+Over on github we create a pull request, wait for the github action checks to give us the green light once all the tests have passed, and then squash and merge. 
 
 The full developer sequence goes something like this
 
@@ -637,11 +665,22 @@ $ python -m twine upload dist/*
 
 ## Miscellaneous
 
-On travis, it's a good idea to set a cron job to run the test suite against the main branch on a regular basis. This will alert you of problems caused by your dependencies updating. (For instance, one of my other projects just broke, apparently because flake8 updated it's rules.) You have to have the main branch setup for travis first before you can set this up.
+It's a good idea to set a cron job to run the test suite against the main branch on a regular basis. This will alert you of problems caused by your dependencies updating. (For instance, one of my other projects just broke, apparently because flake8 updated it's rules.) Add a schedule line to `.github/workflows/python-package.yml`
+
+```
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: "0 13 * * *"  # Every day at 1pm UTC (6am PST)
+```
+
 
 On Github, add a description, website url (typically pointing at readthedocs), and project tags. And review the rest of githubs settings. 
 
-Other python tools to consider using include [black, The uncompromising code formatter](https://black.readthedocs.io/en/stable/), and [isort](https://pypi.org/project/isort/) which will sort your import statements into canonical order. The command `make delint` will run these tools on your code, with the right magic incantations so that isort and black are compatible.
+Other python tools to consider using include [black, The uncompromising code formatter](https://black.readthedocs.io/en/stable/), and [isort](https://pypi.org/project/isort/) which will sort your import statements into canonical order. The command `make delint` will run these tools on your code, with the right magic incantations so that `isort` and `black` are compatible.
 
 ## Conclusion
 
