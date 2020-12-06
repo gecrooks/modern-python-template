@@ -7,8 +7,9 @@
 Package wide configuration
 """
 
-import platform
 import re
+import platform
+
 import sys
 import typing
 
