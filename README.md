@@ -30,8 +30,16 @@ The next decision is which of the plethora of [Open Source](https://opensource.o
 
 ## Create repo
 
-Next we need to initialize a git repo. It's easiest to create the repo on github and clone to our local machine (This way we don't have to mess around setting the origin and such like). Github will helpfully add a `README.md`, the license, and a python `.gitignore` for us. (I'll add `.DS_Store` to the ignore file latter. This is a hidden directory that Mac OS adds all over the place.)
+Next we need to initialize a git repo. It's easiest to create the repo on github and clone to our local machine (This way we don't have to mess around setting the origin and such like). Github will helpfully add a `README.md`, the license, and a python `.gitignore` for us. 
 
+Note that MacOS likes to scatter `.DS_Store` folders around (they store the finder display and icons options). We don't want to accidently add these to our repo. But this is a machine/developer issue, not a project issue. So if you're on a mac you should configure git to ignore `.DS_Store` globally.
+
+```
+    # specify a global exclusion list
+    git config --global core.excludesfile ~/.gitignore
+    # adding .DS_Store to that list
+    echo .DS_Store >> ~/.gitignore
+```
 
 ## Clone repo 
 
@@ -45,20 +53,20 @@ On our local machine the first thing we do is create a new conda environment. (Y
 
 Now we clone the repo locally.
 ```
-    (QC) $ git clone https://github.com/gecrooks/python-mvp.git
+    (MVP) $ git clone https://github.com/gecrooks/python-mvp.git
     Cloning into 'python-mvp'...
     remote: Enumerating objects: 4, done.
     remote: Counting objects: 100% (4/4), done.
     remote: Compressing objects: 100% (3/3), done.
     remote: Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
     Unpacking objects: 100% (4/4), done.
-    (QC) $ cd python-mvp
+    (MVP) $ cd python-mvp
 ```
 
 Lets tag this initial commit for posterities sake (And so I can [link](https://github.com/gecrooks/python-mvp/releases/tag/v0.0.0) to the code at this instance).
 ```
-  (QC) $ git tag v0.0.0
-  (QC) $ git push origin v0.0.0
+  (MVP) $ git tag v0.0.0
+  (MVP) $ git push origin v0.0.0
 ```
 For reasons that are unclear to me the regular `git push` doesn't push tags. We have push the tags explicitly by name. Note we need to specify a full MAJOR.MINOR.PATCH version number, and not just e.g. '0.1', for technical reasons that have to do with how we're going to manage package versions.
 
@@ -77,8 +85,8 @@ I tend to name branches with my initials (so I know it's my branch on multi-deve
 
 Let's complete the minimum viable python project. We need the actual python module, signaled by a (currently) blank `__init__.py` file. 
 ```
-    (QC) $ mkdir python_mvp
-    (QC) $ touch python_mvp/__init__.py
+    (MVP) $ mkdir python_mvp
+    (MVP) $ touch python_mvp/__init__.py
 ```
 
 Python standards for packaging and distribution seems to be in flux (again...). So following what I think the current standard is we need 3 files, `setup.py`, `pyproject.toml`, and `setup.cfg`. 
@@ -267,7 +275,7 @@ def test_version():
 and run our test. (The 'python -m' prefix isn't strictly necessary, but it helps ensure that pytest is running under the correct copy of python.)
 ```
 
-(QC) $ python -m pytest
+(MVP) $ python -m pytest
 ========================================================================================== test session starts ===========================================================================================
 platform darwin -- Python 3.8.3, pytest-5.4.3, py-1.8.2, pluggy-0.13.1
 rootdir: /Users/work/Work/Projects/python_mvp
@@ -421,7 +429,7 @@ $ git add Makefile *.*
 I like to add a Makefile with targets for all of the common development tools I need to run. This is partially for convenience, and partially as documentation, i.e. here are all the commands you need to run to test, lint, typecheck, and build the code (and so on.) I use a [clever hack](https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html) so that the makefile self documents.
 
 ```
-(QC) $ make
+(MVP) $ make
 all          Run all tests
 test         Run unittests
 coverage     Report test coverage using current backend
@@ -539,13 +547,13 @@ We tag our release candidate so that we get a clean version number (pypi will ob
 
 First we push to the pypi's test repository.
 ```
-(QC) $ python -m twine upload --repository testpypi dist/*
+(MVP) $ python -m twine upload --repository testpypi dist/*
 ```
 You'll need to create a pypi account if you don't already have one. 
 
 Let's make sure it worked by installing from pypi into a fresh conda environment.
 ```
-(QC) $ conda deactivate
+(MVP) $ conda deactivate
 $ conda create --name tmp
 $ conda activate tmp
 (tmp) $ pip install --index-url https://test.pypi.org/simple/ --no-deps python_mvp
@@ -555,11 +563,11 @@ $ conda activate tmp
 
 It's a good idea to install Dave Shawley's [setupext-janitor](https://github.com/dave-shawley/setupext-janitor).
 ```
-(QC) $ pip install -q setupext-janitor
+(MVP) $ pip install -q setupext-janitor
 ```
 Setuptools has a clean command to remove build files, but it doesn't actually do a good job of cleaning up after itself. But with `setupext-janitor` installed we can remove all of the files that the build process generates.
 ```
-(QC) $ ./setup.py clean --all
+(MVP) $ ./setup.py clean --all
 ```
 
 ## Merge and Tag
