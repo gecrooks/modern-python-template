@@ -30,7 +30,8 @@ The next decision is which of the plethora of [Open Source](https://opensource.o
 
 ## Create repo
 
-Next we need to initialize a git repo. It's easiest to create the repo on github and clone to our local machine (This way we don't have to mess around setting the origin and such like). Github will helpfully add a `README.md`, the license, and a python `.gitignore` for us. 
+Next we need to initialize a git repo. It's easiest to create the repo on github and clone to our local machine (This way we don't have to mess around setting the origin and such like). Github will helpfully add a `README.md`, the license, and a python `.gitignore` for us. On Github, add a description, website url (typically pointing at readthedocs), project tags, and review the rest of github's settings. 
+ 
 
 Note that MacOS likes to scatter `.DS_Store` folders around (they store the finder icon display options). We don't want to accidentally add these to our repo. But this is a machine/developer issue, not a project issue. So if you're on a mac you should configure git to ignore `.DS_Store` globally.
 
@@ -672,23 +673,6 @@ $ python setup.py clean --all
 $ python setup.py sdist bdist_wheel
 $ python -m twine upload dist/*
 ```
-
-## Miscellaneous
-
-It's a good idea to set a cron job to run the test suite against the main branch on a regular basis. This will alert you of problems caused by your dependencies updating. (For instance, one of my other projects just broke, apparently because flake8 updated it's rules.) Add a schedule line to `.github/workflows/python-package.yml`
-
-```
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  schedule:
-    - cron: "0 13 * * *"  # Every day at 1pm UTC (6am PST)
-```
-
-
-On Github, add a description, website url (typically pointing at readthedocs), and project tags. And review the rest of githubs settings. 
 
 
 ## Conclusion
