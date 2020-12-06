@@ -42,5 +42,5 @@ jobs:
       run: |
         mypy python_mvp
     - name: Build documentation with sphinx
-      xrun: |
+      run: |
         sphinx-build -M html docs docs/_build
