@@ -32,7 +32,7 @@ The next decision is which of the plethora of [Open Source](https://opensource.o
 
 Next we need to initialize a git repo. It's easiest to create the repo on github and clone to our local machine (This way we don't have to mess around setting the origin and such like). Github will helpfully add a `README.md`, the license, and a python `.gitignore` for us. 
 
-Note that MacOS likes to scatter `.DS_Store` folders around (they store the finder display and icons options). We don't want to accidently add these to our repo. But this is a machine/developer issue, not a project issue. So if you're on a mac you should configure git to ignore `.DS_Store` globally.
+Note that MacOS likes to scatter `.DS_Store` folders around (they store the finder icon display options). We don't want to accidentally add these to our repo. But this is a machine/developer issue, not a project issue. So if you're on a mac you should configure git to ignore `.DS_Store` globally.
 
 ```
     # specify a global exclusion list
@@ -176,7 +176,8 @@ dev =
     setuptools_scm
 ```
 
-It's good practice to support at least two consecutive versions of python. But for new projects it's not unreasonable to support only the latest stable python version. 
+It's good practice to support at least two consecutive versions of python. Starting with 3.9, python is moving to an annual [release schedule](https://www.python.org/dev/peps/pep-0602/). The initial 3.x.0 release will be in early October and the first bug patch 3.x.1 in early December, second in February, and so on.  Since it takes many important packages some time to upgrade (e.g. numpy and tensorflow are often bottlenecks), one should probably plan to upgrade python support around February each year.
+
 
 We can now install our package (as editable -e, so that the code in our repo is live).
 ```
@@ -196,24 +197,24 @@ My favored approach is use git tags as the source of truth (Option 7 in the abov
 The convention is that the version number of a python packages should be available as `packagename.__version__`. 
 So we add the following code to `python_mvp/config.py` to extract the version number metadata.
 ```
-try:  # pragma: no cover
+try:
     # python >= 3.8
-    from importlib.metadata import PackageNotFoundError  # type: ignore
-    from importlib.metadata import requires  # type: ignore
-    from importlib.metadata import version  # type: ignore
-except ImportError:  # pragma: no cover  # type: ignore
+    from importlib import metadata as importlib_metadata  # type: ignore
+except ImportError:  # pragma: no cover
     # python == 3.7
-    from importlib_metadata import PackageNotFoundError  # type: ignore
-    from importlib_metadata import requires  # type: ignore
-    from importlib_metadata import version  # type: ignore
+    import importlib_metadata  # type: ignore  # noqa: F401
 
-package_name = 'python_mvp'
+
+__all__ = ["__version__", "about"]
+
+
+package_name = "python_mvp"
 
 try:
-    __version__ = version(package_name)
-except PackageNotFoundError:  # pragma: no cover
+    __version__ = importlib_metadata.version(package_name)  # type: ignore
+except Exception:  # pragma: no cover
     # package is not installed
-    __version__ = '?.?.?'
+    __version__ = "?.?.?"
 
 
 ```
@@ -232,7 +233,7 @@ One of my tricks is to add a function to print the versions of the core upstream
 ```
 # Configuration (> python -m python_mvp.about)
 platform                 macOS-10.13.6-x86_64-i386-64bit
-python_mvp               0.0.1.dev0+g530b742.d20200621
+python_mvp               0.0.1
 python                   3.8.3
 numpy                    1.18.5
 pytest                   5.4.3
