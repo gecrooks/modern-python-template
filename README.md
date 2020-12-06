@@ -30,7 +30,8 @@ The next decision is which of the plethora of [Open Source](https://opensource.o
 
 ## Create repo
 
-Next we need to initialize a git repo. It's easiest to create the repo on github and clone to our local machine (This way we don't have to mess around setting the origin and such like). Github will helpfully add a `README.md`, the license, and a python `.gitignore` for us. 
+Next we need to initialize a git repo. It's easiest to create the repo on github and clone to our local machine (This way we don't have to mess around setting the origin and such like). Github will helpfully add a `README.md`, the license, and a python `.gitignore` for us. On Github, add a description, website url (typically pointing at readthedocs), project tags, and review the rest of github's settings. 
+ 
 
 Note that MacOS likes to scatter `.DS_Store` folders around (they store the finder icon display options). We don't want to accidentally add these to our repo. But this is a machine/developer issue, not a project issue. So if you're on a mac you should configure git to ignore `.DS_Store` globally.
 
@@ -359,6 +360,11 @@ ignore = E203, W503
 We need to override the linter on occasion. We add pragma such as `# noqa: F401` to assert that no, really, in this case we do know what we're doing.
 
 
+Two other python code format tools to consider using are [isort](https://pypi.org/project/isort/) and [black, The uncompromising code formatter](https://black.readthedocs.io/en/stable/). Isort sorts your import statements into a canonical order. And Black is the Model-T Ford of code formatting -- any format you want, so long as it's Black. I could quibble about some of Black's code style, but in the end it's just easier to blacken your code and accept black's choices, and thereby gain a consistent coding style across developers. 
+
+The command `make delint` will run these `isort` and `black` on your code, with the right magic incantations so that they are compatible.
+
+
 ## Copyright
 It's common practice to add a copyright and license notice to the top of every source file -- something like this:
 ```
@@ -486,6 +492,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  schedule:
+    - cron: "0 13 * * *"  # Every day at 1pm UTC (6am PST)    
 
 jobs:
   build:
@@ -524,7 +532,9 @@ jobs:
         sphinx-build -M html docs docs/_build
 
 ```
-Note that these tests are picky. Not only must the unit tests pass, but test coverage must be 100%, the code must be delinted and properly typed, and the docs have to build without error.
+Note that these tests are picky. Not only must the unit tests pass, but test coverage must be 100%, the code must be delinted, blackened, isorted, and properly typed, and the docs have to build without error.
+
+It's a good idea to set a cron job to run the test suite against the main branch on a regular basis (the `schedule` block above). This will alert you of problems caused by your dependencies updating. (For instance, one of my other projects just broke, apparently because flake8 updated it's rules.)
 
 Let's add, commit, and push our changes. 
 ```
@@ -664,24 +674,6 @@ $ python setup.py sdist bdist_wheel
 $ python -m twine upload dist/*
 ```
 
-## Miscellaneous
-
-It's a good idea to set a cron job to run the test suite against the main branch on a regular basis. This will alert you of problems caused by your dependencies updating. (For instance, one of my other projects just broke, apparently because flake8 updated it's rules.) Add a schedule line to `.github/workflows/python-package.yml`
-
-```
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  schedule:
-    - cron: "0 13 * * *"  # Every day at 1pm UTC (6am PST)
-```
-
-
-On Github, add a description, website url (typically pointing at readthedocs), and project tags. And review the rest of githubs settings. 
-
-Other python tools to consider using include [black, The uncompromising code formatter](https://black.readthedocs.io/en/stable/), and [isort](https://pypi.org/project/isort/) which will sort your import statements into canonical order. The command `make delint` will run these tools on your code, with the right magic incantations so that `isort` and `black` are compatible.
 
 ## Conclusion
 
