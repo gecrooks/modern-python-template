@@ -15,7 +15,7 @@ all: about coverage lint typecheck docs build   ## Run all tests
 test:		## Run unittests
 	pytest --disable-pytest-warnings
 
-coverage:	## Report test coverage using current backend
+coverage:	## Report test coverage
 	@echo
 	pytest --disable-pytest-warnings --cov
 	@echo

@@ -1,7 +1,7 @@
 # python-mvp: Minimal Viable Product for an open source, github hosted, python package
 
 
-[![Build Status](https://travis-ci.org/gecrooks/python-mvp.svg?branch=master)](https://travis-ci.org/gecrooks/python-mvp) [![Documentation Status](https://readthedocs.org/projects/python-mvp/badge/?version=latest)](https://python-mvp.readthedocs.io/en/latest/?badge=latest)
+![Build Status](https://github.com/gecrooks/python-mvp/workflows/Python%20package/badge.svg) [![Documentation Status](https://readthedocs.org/projects/python-mvp/badge/?version=latest)](https://python-mvp.readthedocs.io/en/latest/?badge=latest)
 
 [Source](https://github.com/gecrooks/python-mvp)
 
@@ -30,8 +30,16 @@ The next decision is which of the plethora of [Open Source](https://opensource.o
 
 ## Create repo
 
-Next we need to initialize a git repo. It's easiest to create the repo on github and clone to our local machine (This way we don't have to mess around setting the origin and such like). Github will helpfully add a `README.md`, the license, and a python `.gitignore` for us. (I'll add `.DS_Store` to the ignore file latter. This is a hidden directory that Mac OS adds all over the place.)
+Next we need to initialize a git repo. It's easiest to create the repo on github and clone to our local machine (This way we don't have to mess around setting the origin and such like). Github will helpfully add a `README.md`, the license, and a python `.gitignore` for us. 
 
+Note that MacOS likes to scatter `.DS_Store` folders around (they store the finder icon display options). We don't want to accidentally add these to our repo. But this is a machine/developer issue, not a project issue. So if you're on a mac you should configure git to ignore `.DS_Store` globally.
+
+```
+    # specify a global exclusion list
+    git config --global core.excludesfile ~/.gitignore
+    # adding .DS_Store to that list
+    echo .DS_Store >> ~/.gitignore
+```
 
 ## Clone repo 
 
@@ -45,20 +53,20 @@ On our local machine the first thing we do is create a new conda environment. (Y
 
 Now we clone the repo locally.
 ```
-    (QC) $ git clone https://github.com/gecrooks/python-mvp.git
+    (MVP) $ git clone https://github.com/gecrooks/python-mvp.git
     Cloning into 'python-mvp'...
     remote: Enumerating objects: 4, done.
     remote: Counting objects: 100% (4/4), done.
     remote: Compressing objects: 100% (3/3), done.
     remote: Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
     Unpacking objects: 100% (4/4), done.
-    (QC) $ cd python-mvp
+    (MVP) $ cd python-mvp
 ```
 
 Lets tag this initial commit for posterities sake (And so I can [link](https://github.com/gecrooks/python-mvp/releases/tag/v0.0.0) to the code at this instance).
 ```
-  (QC) $ git tag v0.0.0
-  (QC) $ git push origin v0.0.0
+  (MVP) $ git tag v0.0.0
+  (MVP) $ git push origin v0.0.0
 ```
 For reasons that are unclear to me the regular `git push` doesn't push tags. We have push the tags explicitly by name. Note we need to specify a full MAJOR.MINOR.PATCH version number, and not just e.g. '0.1', for technical reasons that have to do with how we're going to manage package versions.
 
@@ -77,8 +85,8 @@ I tend to name branches with my initials (so I know it's my branch on multi-deve
 
 Let's complete the minimum viable python project. We need the actual python module, signaled by a (currently) blank `__init__.py` file. 
 ```
-    (QC) $ mkdir python_mvp
-    (QC) $ touch python_mvp/__init__.py
+    (MVP) $ mkdir python_mvp
+    (MVP) $ touch python_mvp/__init__.py
 ```
 
 Python standards for packaging and distribution seems to be in flux (again...). So following what I think the current standard is we need 3 files, `setup.py`, `pyproject.toml`, and `setup.cfg`. 
@@ -168,7 +176,8 @@ dev =
     setuptools_scm
 ```
 
-It's good practice to support at least two consecutive versions of python. But for new projects it's not unreasonable to support only the latest stable python version. 
+It's good practice to support at least two consecutive versions of python. Starting with 3.9, python is moving to an annual [release schedule](https://www.python.org/dev/peps/pep-0602/). The initial 3.x.0 release will be in early October and the first bug patch 3.x.1 in early December, second in February, and so on.  Since it takes many important packages some time to upgrade (e.g. numpy and tensorflow are often bottlenecks), one should probably plan to upgrade python support around February each year. Upgrading involves changing the python version numbers in the tests and `config.cfg`, and then cleaning up any `__future__` or conditional imports, or other hacks added to maintain compatibility with older python releases. 
+
 
 We can now install our package (as editable -e, so that the code in our repo is live).
 ```
@@ -188,24 +197,24 @@ My favored approach is use git tags as the source of truth (Option 7 in the abov
 The convention is that the version number of a python packages should be available as `packagename.__version__`. 
 So we add the following code to `python_mvp/config.py` to extract the version number metadata.
 ```
-try:  # pragma: no cover
+try:
     # python >= 3.8
-    from importlib.metadata import PackageNotFoundError  # type: ignore
-    from importlib.metadata import requires  # type: ignore
-    from importlib.metadata import version  # type: ignore
-except ImportError:  # pragma: no cover  # type: ignore
+    from importlib import metadata as importlib_metadata  # type: ignore
+except ImportError:  # pragma: no cover
     # python == 3.7
-    from importlib_metadata import PackageNotFoundError  # type: ignore
-    from importlib_metadata import requires  # type: ignore
-    from importlib_metadata import version  # type: ignore
+    import importlib_metadata  # type: ignore  # noqa: F401
 
-package_name = 'python_mvp'
+
+__all__ = ["__version__", "about"]
+
+
+package_name = "python_mvp"
 
 try:
-    __version__ = version(package_name)
-except PackageNotFoundError:  # pragma: no cover
+    __version__ = importlib_metadata.version(package_name)  # type: ignore
+except Exception:  # pragma: no cover
     # package is not installed
-    __version__ = '?.?.?'
+    __version__ = "?.?.?"
 
 
 ```
@@ -224,7 +233,7 @@ One of my tricks is to add a function to print the versions of the core upstream
 ```
 # Configuration (> python -m python_mvp.about)
 platform                 macOS-10.13.6-x86_64-i386-64bit
-python_mvp               0.0.1.dev0+g530b742.d20200621
+python_mvp               0.0.1
 python                   3.8.3
 numpy                    1.18.5
 pytest                   5.4.3
@@ -267,7 +276,7 @@ def test_version():
 and run our test. (The 'python -m' prefix isn't strictly necessary, but it helps ensure that pytest is running under the correct copy of python.)
 ```
 
-(QC) $ python -m pytest
+(MVP) $ python -m pytest
 ========================================================================================== test session starts ===========================================================================================
 platform darwin -- Python 3.8.3, pytest-5.4.3, py-1.8.2, pluggy-0.13.1
 rootdir: /Users/work/Work/Projects/python_mvp
@@ -421,10 +430,10 @@ $ git add Makefile *.*
 I like to add a Makefile with targets for all of the common development tools I need to run. This is partially for convenience, and partially as documentation, i.e. here are all the commands you need to run to test, lint, typecheck, and build the code (and so on.) I use a [clever hack](https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html) so that the makefile self documents.
 
 ```
-(QC) $ make
+(MVP) $ make
 all          Run all tests
 test         Run unittests
-coverage     Report test coverage using current backend
+coverage     Report test coverage
 lint         Lint check python source
 delint       Run isort and black to delint project
 typecheck    Static typechecking 
@@ -458,34 +467,62 @@ I've already got a readthedocs account, so setting up a new project takes but a 
 
 We add some basic information and installation instructions to `README.mb`. Github displays this file on your project home page (but under the file list, so if you have a lot of files at the top level of your project, people might not notice your README.)
 
-A handy trick is to add Build Status and Documentation Status badges for travis and readthedocs. These will proudly declare that your tests are passing (hopefully). (See top of this file)
+A handy trick is to add Build Status and Documentation Status badges for Github actions tests and readthedocs. These will proudly declare that your tests are passing (hopefully). (See top of this file)
 
 
 ## Continuous Integration
 
 Another brilliant advance to software engineering practice is continuous integration (CI). The basic idea is that all code gets thoroughly tested before it's added to the master branch.
 
-I use [travis-ci](https://travis-ci.org/). I already have travis setup and hooked into my github, so it only takes a few clicks to setup a new project. We need a `.travis.yml` configuration file (in [yaml](https://yaml.org/) format).
+Github now makes this very easy to setup with Github actions. They even provcide basic templates. This testing workflow lives in `.github/workflows/python-package.yml`, and is a modification of Github's  `python-package` workflow.
 ```
-calanguage: python
-sudo: required
-dist: xenial
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-python:
-  - "3.8"
+name: Python package
 
-before_install:
-  - pip install -U pip
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
-install:
-  - pip install .[dev]  # install package + test dependencies
+jobs:
+  build:
 
-script:
-  - python -m python_mvp.about
-  - python -m pytest --cov=python_mvp --cov-fail-under 100
-  - flake8
-  - mypy
-  - sphinx-build -M html docs docs/_build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.7', '3.8']
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        python -m pip install -e .[dev]  # install package + test dependencies
+    - name: About
+      run: |
+        python -m python_mvp.about
+    - name: Lint with flake8
+      run: |
+        flake8 .
+    - name: Test with pytest
+      run: |
+        python -m pytest --cov=python_mvp --cov-fail-under 100
+    - name: Typecheck with mypy
+      run: |
+        mypy python_mvp
+    - name: Build documentation with sphinx
+      run: |
+        sphinx-build -M html docs docs/_build
+
 ```
 Note that these tests are picky. Not only must the unit tests pass, but test coverage must be 100%, the code must be delinted and properly typed, and the docs have to build without error.
 
@@ -497,7 +534,7 @@ Changes to be committed:
   (use "git reset HEAD <file>..." to unstage)
 
     new file:   .readthedocs.yml
-    new file:   .travis.yml
+    new file:   .github/workflows/python-package.yml
     new file:   Makefile
     modified:   README.md
     new file:   docs/Makefile
@@ -519,7 +556,7 @@ $ git commit -m "Minimum viable package"
 $ git push --set-upstream origin gec001-init
 ...
 ```
-If all goes well travis will see our push to github, and build and test the code in the branch (You may have to make a pull request for travis to see this first test attempt). Probably all the tests won't pass on the first try. It's easy to forget something (which is why we have automatic tests). So tweak the code, and push another commit until the tests pass.
+If all goes well Github will see our push, and build and test the code in the branch. Probably all the tests won't pass on the first try. It's easy to forget something (which is why we have automatic tests). So tweak the code, and push another commit until the tests pass.
 
 
 
@@ -539,13 +576,13 @@ We tag our release candidate so that we get a clean version number (pypi will ob
 
 First we push to the pypi's test repository.
 ```
-(QC) $ python -m twine upload --repository testpypi dist/*
+(MVP) $ python -m twine upload --repository testpypi dist/*
 ```
 You'll need to create a pypi account if you don't already have one. 
 
 Let's make sure it worked by installing from pypi into a fresh conda environment.
 ```
-(QC) $ conda deactivate
+(MVP) $ conda deactivate
 $ conda create --name tmp
 $ conda activate tmp
 (tmp) $ pip install --index-url https://test.pypi.org/simple/ --no-deps python_mvp
@@ -555,16 +592,16 @@ $ conda activate tmp
 
 It's a good idea to install Dave Shawley's [setupext-janitor](https://github.com/dave-shawley/setupext-janitor).
 ```
-(QC) $ pip install -q setupext-janitor
+(MVP) $ pip install -q setupext-janitor
 ```
 Setuptools has a clean command to remove build files, but it doesn't actually do a good job of cleaning up after itself. But with `setupext-janitor` installed we can remove all of the files that the build process generates.
 ```
-(QC) $ ./setup.py clean --all
+(MVP) $ ./setup.py clean --all
 ```
 
 ## Merge and Tag
 
-Over on github we create a pull request, wait for travis to give us the green light once all the tests have passed, and then squash and merge. 
+Over on github we create a pull request, wait for the github action checks to give us the green light once all the tests have passed, and then squash and merge. 
 
 The full developer sequence goes something like this
 
@@ -629,11 +666,22 @@ $ python -m twine upload dist/*
 
 ## Miscellaneous
 
-On travis, it's a good idea to set a cron job to run the test suite against the main branch on a regular basis. This will alert you of problems caused by your dependencies updating. (For instance, one of my other projects just broke, apparently because flake8 updated it's rules.) You have to have the main branch setup for travis first before you can set this up.
+It's a good idea to set a cron job to run the test suite against the main branch on a regular basis. This will alert you of problems caused by your dependencies updating. (For instance, one of my other projects just broke, apparently because flake8 updated it's rules.) Add a schedule line to `.github/workflows/python-package.yml`
+
+```
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: "0 13 * * *"  # Every day at 1pm UTC (6am PST)
+```
+
 
 On Github, add a description, website url (typically pointing at readthedocs), and project tags. And review the rest of githubs settings. 
 
-Other python tools to consider using include [black, The uncompromising code formatter](https://black.readthedocs.io/en/stable/), and [isort](https://pypi.org/project/isort/) which will sort your import statements into canonical order. The command `make delint` will run these tools on your code, with the right magic incantations so that isort and black are compatible.
+Other python tools to consider using include [black, The uncompromising code formatter](https://black.readthedocs.io/en/stable/), and [isort](https://pypi.org/project/isort/) which will sort your import statements into canonical order. The command `make delint` will run these tools on your code, with the right magic incantations so that `isort` and `black` are compatible.
 
 ## Conclusion
 
