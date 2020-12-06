@@ -176,7 +176,7 @@ dev =
     setuptools_scm
 ```
 
-It's good practice to support at least two consecutive versions of python. Starting with 3.9, python is moving to an annual [release schedule](https://www.python.org/dev/peps/pep-0602/). The initial 3.x.0 release will be in early October and the first bug patch 3.x.1 in early December, second in February, and so on.  Since it takes many important packages some time to upgrade (e.g. numpy and tensorflow are often bottlenecks), one should probably plan to upgrade python support around February each year.
+It's good practice to support at least two consecutive versions of python. Starting with 3.9, python is moving to an annual [release schedule](https://www.python.org/dev/peps/pep-0602/). The initial 3.x.0 release will be in early October and the first bug patch 3.x.1 in early December, second in February, and so on.  Since it takes many important packages some time to upgrade (e.g. numpy and tensorflow are often bottlenecks), one should probably plan to upgrade python support around February each year. Upgrading involves changing the python version numbers in the tests and `config.cfg`, and then cleaning up any `__future__` or conditional imports, or other hacks added to maintain compatibility with older python releases. 
 
 
 We can now install our package (as editable -e, so that the code in our repo is live).
