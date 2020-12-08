@@ -28,15 +28,14 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        python -m pip install -e .[dev]  # install package + test dependencies
+        python -m pip install .[dev]  # install package + test dependencies
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi        
     - name: About
       run: |
-        python -m python_mvp.about
+        python -m ${{ github.event.repository.name }}.about
     - name: Test with pytest
       run: |
-        python -m pytest --cov=python_mvp --cov-fail-under 100
+        python -m pytest --cov=${{ github.event.repository.name }} --cov-fail-under 100
     - name: Lint with black and isort (run `make delint` to fix issues)
       run: |
         black --check .  
@@ -46,7 +45,7 @@ jobs:
         flake8 .            
     - name: Typecheck with mypy
       run: |
-        mypy python_mvp
+        mypy ${{ github.event.repository.name }}
     - name: Build documentation with sphinx
       run: |
         sphinx-build -M html docs docs/_build
