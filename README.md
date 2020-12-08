@@ -175,8 +175,6 @@ dev =
     mypy
     sphinx
     sphinxcontrib-bibtex
-    twine
-    setupext-janitor
     setuptools_scm
 ```
 
@@ -246,8 +244,6 @@ flake8                   3.8.3
 mypy                     0.780
 sphinx                   3.1.1
 sphinxcontrib-bibtex     1.0.0
-twine                    3.1.1
-setupext-janitor         1.1.2
 setuptools_scm           4.1.2
 ```
 The `about()` function to print this information is placed in `config.py`. The file `about.py` contains the standard python command line interface (CLI), 
@@ -579,7 +575,7 @@ We should now be ready to do a test submission to PyPI, The Python Package Index
 Follow the directions laid out in the [python packaging](https://packaging.python.org/tutorials/packaging-projects/) documentation.
 
 ```
-$ pip install -q twine
+$ pip install -q wheel setuptools twine
 ...
 $ git tag v0.1.0rc1
 $ python setup.py sdist bdist_wheel 
@@ -600,17 +596,9 @@ $ conda create --name tmp
 $ conda activate tmp
 (tmp) $ pip install --index-url https://test.pypi.org/simple/ --no-deps gecrooks-python-template
 (tmp) $ python -m gecrooks_python_template.about
-(tmp) $ conda activate QC
+(tmp) $ conda activate GTP
 ```
 
-It's a good idea to install Dave Shawley's [setupext-janitor](https://github.com/dave-shawley/setupext-janitor).
-```
-(GTP) $ pip install -q setupext-janitor
-```
-Setuptools has a clean command to remove build files, but it doesn't actually do a good job of cleaning up after itself. But with `setupext-janitor` installed we can remove all of the files that the build process generates.
-```
-(GTP) $ ./setup.py clean --all
-```
 
 ## Merge and Tag
 
@@ -666,16 +654,8 @@ $ git push
 
 ## Tag and release
 
-Assuming everything went well, you can now upload a release to pypi proper. Sync our local master branch, as in step 1 above, tag, and upload to pypi
+Assuming everything went well, you can now upload a release to pypi proper. We can add a [github workflow](.github/workflows/python-publish.yml) to automatically upload new releases tagged on github.
 
-```
-$ git checkout master
-$ git tag v0.1.0
-$ git push origin v0.1.0
-$ python setup.py clean --all
-$ python setup.py sdist bdist_wheel
-$ python -m twine upload dist/*
-```
 
 
 ## Conclusion
