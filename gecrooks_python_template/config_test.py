@@ -7,28 +7,28 @@ import glob
 import io
 import subprocess
 
-import python_mvp
+import gecrooks_python_template
 
 
 def test_version() -> None:
-    assert python_mvp.__version__
+    assert gecrooks_python_template.__version__
 
 
 def test_about() -> None:
     out = io.StringIO()
-    python_mvp.about(out)
+    gecrooks_python_template.about(out)
     print(out)
 
 
 def test_about_main() -> None:
-    rval = subprocess.call(["python", "-m", "python_mvp.about"])
+    rval = subprocess.call(["python", "-m", "gecrooks_python_template.about"])
     assert rval == 0
 
 
 def test_copyright() -> None:
     """Check that source code files contain a copyright line"""
-    exclude = set(["python_mvp/version.py"])
-    for fname in glob.glob("python_mvp/**/*.py", recursive=True):
+    exclude = set(["gecrooks_python_template/version.py"])
+    for fname in glob.glob("gecrooks_python_template/**/*.py", recursive=True):
         if fname in exclude:
             continue
         print("Checking " + fname + " for copyright header")
