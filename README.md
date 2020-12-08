@@ -1,7 +1,7 @@
 # python-mvp: Minimal Viable Product for an open source, github hosted, python package
 
 
-![Build Status](https://github.com/gecrooks/python-mvp/workflows/Python%20package/badge.svg) [![Documentation Status](https://readthedocs.org/projects/python-mvp/badge/?version=latest)](https://python-mvp.readthedocs.io/en/latest/?badge=latest)
+![Build Status](https://github.com/gecrooks/python-mvp/workflows/Build/badge.svg) [![Documentation Status](https://readthedocs.org/projects/python-mvp/badge/?version=latest)](https://python-mvp.readthedocs.io/en/latest/?badge=latest)
 
 [Source](https://github.com/gecrooks/python-mvp)
 
