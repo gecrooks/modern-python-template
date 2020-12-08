@@ -1,27 +1,29 @@
-# python-mvp: Minimal Viable Product for an open source, github hosted, python package
+# gecrooks-python-template: Minimal viable setup for an open source, github hosted, python package
 
 
-![Build Status](https://github.com/gecrooks/python-mvp/workflows/Build/badge.svg) [![Documentation Status](https://readthedocs.org/projects/python-mvp/badge/?version=latest)](https://python-mvp.readthedocs.io/en/latest/?badge=latest)
+![Build Status](https://github.com/gecrooks/gecrooks-python-template/workflows/Build/badge.svg) [![Documentation Status](https://readthedocs.org/projects/gecrooks-python-template/badge/?version=latest)](https://gecrooks-python-template.readthedocs.io/en/latest/?badge=latest)
 
-[Source](https://github.com/gecrooks/python-mvp)
+[Source](https://github.com/gecrooks/gecrooks-python-template)
 
 
 ## Installation for development
 
 ```
-$ git clone https://github.com/gecrooks/python-mvp.git
-$ cd python-mvp
+$ git clone https://github.com/gecrooks/gecrooks-python-template.git
+$ cd gecrooks-python-template
 $ pip install -e .[dev]
 ```
 
 
 ## About: On the creation and crafting of a python project
 
-This is discussion of the steps needed to setup an open source, github hosted, python package ready for further development.
+This is a discussion of the steps needed to setup an open source, github hosted, python package ready for further development.
 
 ## Naming
 
-The first decision to make is the name of the project. And for python packages the most important criteria is that the name isn't already taken on pypi, the repository from which we install python packages with `pip`. So we should do a quick Internet search: This name is available on pypi, there are no other repos of that name on github, and a google search doesn't pull up anything relevant. So we're good to go. 
+The first decision to make is the name of the project. And for python packages the most important criteria is that the name isn't already taken on [pypi](https://pypi.org/), the repository from which we install python packages with `pip`. So we should do a quick Internet search: This name is available on pypi, there are no other repos of that name on github, and a google search doesn't pull up anything relevant. So we're good to go. 
+
+Note that github repo and pypi packages are named using dashes (`-`), but that the corresponsing python module are named with underscores (`_`).
 
 ## License
 
@@ -46,28 +48,29 @@ Note that MacOS likes to scatter `.DS_Store` folders around (they store the find
 
 On our local machine the first thing we do is create a new conda environment. (You have conda installed, right?) This way if we balls up the installation of some dependency (which happens distressingly often) we can nuke the environment and start again. 
 ```
-    $ conda create --name MVP
-    $ source activate MVP
-    (MVP) $ python --version
+    $ conda create --name GPT
+    $ source activate GPT
+    (GPT) $ python --version
     Python 3.8.3
 ```
 
 Now we clone the repo locally.
+
 ```
-    (MVP) $ git clone https://github.com/gecrooks/python-mvp.git
-    Cloning into 'python-mvp'...
+    (GPT) $ git clone https://github.com/gecrooks/gecrooks-python-template.git
+    Cloning into 'gecrooks-python-template'...
     remote: Enumerating objects: 4, done.
     remote: Counting objects: 100% (4/4), done.
     remote: Compressing objects: 100% (3/3), done.
     remote: Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
     Unpacking objects: 100% (4/4), done.
-    (MVP) $ cd python-mvp
+    (GPT) $ cd gecrooks-python-template
 ```
 
-Lets tag this initial commit for posterities sake (And so I can [link](https://github.com/gecrooks/python-mvp/releases/tag/v0.0.0) to the code at this instance).
+Lets tag this initial commit for posterities sake (And so I can [link](https://github.com/gecrooks/gecrooks-python-template/releases/tag/v0.0.0) to the code at this instance).
 ```
-  (MVP) $ git tag v0.0.0
-  (MVP) $ git push origin v0.0.0
+  (GPT) $ git tag v0.0.0
+  (GPT) $ git push origin v0.0.0
 ```
 For reasons that are unclear to me the regular `git push` doesn't push tags. We have push the tags explicitly by name. Note we need to specify a full MAJOR.MINOR.PATCH version number, and not just e.g. '0.1', for technical reasons that have to do with how we're going to manage package versions.
 
@@ -86,8 +89,8 @@ I tend to name branches with my initials (so I know it's my branch on multi-deve
 
 Let's complete the minimum viable python project. We need the actual python module, signaled by a (currently) blank `__init__.py` file. 
 ```
-    (MVP) $ mkdir python_mvp
-    (MVP) $ touch python_mvp/__init__.py
+    (GPT) $ mkdir gecrooks_python_template
+    (GPT) $ touch gecrooks_python_template/__init__.py
 ```
 
 Python standards for packaging and distribution seems to be in flux (again...). So following what I think the current standard is we need 3 files, `setup.py`, `pyproject.toml`, and `setup.cfg`. 
@@ -128,8 +131,8 @@ All of the rest of the metadata goes in `setup.cfg` (in INI format).
 # [INI](https://docs.python.org/3/install/index.html#inst-config-syntax) file format.
 
 [metadata]
-name = python_mvp
-url = https://github.com/gecrooks/python_mvp/
+name = gecrooks-python-template
+url = https://github.com/gecrooks/gecrooks_python_template/
 author = Gavin Crooks
 author_email = gavincrooks@gmail.com
 description = "Minimal Viable Product for an open source, github hosted, python package"
@@ -196,7 +199,7 @@ There should be a
 My favored approach is use git tags as the source of truth (Option 7 in the above linked list). We're going to tag releases anyways, so if we also hard code the version number into the python code we'd violate the single source of truth principle. We use the [setuptools_scm](https://github.com/pypa/setuptools_scm) package to automatically construct a version number from the latest git tag during installation.
 
 The convention is that the version number of a python packages should be available as `packagename.__version__`. 
-So we add the following code to `python_mvp/config.py` to extract the version number metadata.
+So we add the following code to `gecrooks_python_template/config.py` to extract the version number metadata.
 ```
 try:
     # python >= 3.8
@@ -209,7 +212,7 @@ except ImportError:  # pragma: no cover
 __all__ = ["__version__", "about"]
 
 
-package_name = "python_mvp"
+package_name = "gecrooks_python_template"
 
 try:
     __version__ = importlib_metadata.version(package_name)  # type: ignore
@@ -219,7 +222,7 @@ except Exception:  # pragma: no cover
 
 
 ```
-and then in `python_mvp/__init__.py`, we import this version number.
+and then in `gecrooks_python_template/__init__.py`, we import this version number.
 ```
 from .config import __version__ as __version__                      # noqa: F401
 ```
@@ -232,9 +235,9 @@ The various pragmas in the code above ("pragma: no cover" and "type: ignore") ar
 One of my tricks is to add a function to print the versions of the core upstream dependencies. This can be extremely helpful when debugging configuration or system dependent bugs, particularly when running continuous integration tests.
 
 ```
-# Configuration (> python -m python_mvp.about)
+# Configuration (> python -m gecrooks_python_template.about)
 platform                 macOS-10.13.6-x86_64-i386-64bit
-python_mvp               0.0.1
+gecrooks-python-template 0.0.1
 python                   3.8.3
 numpy                    1.18.5
 pytest                   5.4.3
@@ -250,8 +253,8 @@ setuptools_scm           4.1.2
 The `about()` function to print this information is placed in `config.py`. The file `about.py` contains the standard python command line interface (CLI), 
 ```
 if __name__ == '__main__':
-    import python_mvp
-    python_mvp.about()
+    import gecrooks_python_template
+    gecrooks_python_template.about()
 ```
 It's important that `about.py` isn't imported by any other code in the package, else we'll get multiple import warnings when we try to run the CLI. 
 
@@ -266,24 +269,24 @@ Currently, the two main options for python unit tests appear to be `unittest` fr
 
 There's two common ways to organize tests. Either we place tests in a separate directory, or they live in the main package along with the rest of the code. In the past I've used the former approach. It keeps the test organized and separate from the production code. But I'm going to try the second approach for this project. The advantage is that the unit tests for a piece of code live right next to the code being tested.
 
-Let's test that we can access the version number (There is no piece of code too trivial that it shouldn't have a unit test.) In `python_mvp/config_test.py` we add
+Let's test that we can access the version number (There is no piece of code too trivial that it shouldn't have a unit test.) In `gecrooks_python_template/config_test.py` we add
 
 ```
-import python_mvp
+import gecrooks_python_template
 
 def test_version():
-    assert python_mvp.__version__
+    assert gecrooks_python_template.__version__
 ```
 and run our test. (The 'python -m' prefix isn't strictly necessary, but it helps ensure that pytest is running under the correct copy of python.)
 ```
 
-(MVP) $ python -m pytest
+(GTP) $ python -m pytest
 ========================================================================================== test session starts ===========================================================================================
 platform darwin -- Python 3.8.3, pytest-5.4.3, py-1.8.2, pluggy-0.13.1
-rootdir: /Users/work/Work/Projects/python_mvp
+rootdir: /Users/work/Work/Projects/gecrooks_python_template
 collected 1 item                                                                                                                                                                                         
 
-python_mvp/config_test.py .                                                                                                                                                                            [100%]
+gecrooks_python_template/config_test.py .                                                                                                                                                                            [100%]
 
 =========================================================================================== 1 passed in 0.02s ============================================================================================
 ```
@@ -294,7 +297,7 @@ from . import __version__
 ```
 But in the test code we use absolute imports. 
 ```
-from python_mvp import __version__
+from gecrooks_python_template import __version__
 ```
 In tests we want to access our code in the same way we would access it from the outside as an end user.
 
@@ -308,7 +311,7 @@ So we want to monitor the test coverage. The [pytest-cov](https://pypi.org/proje
 # pytest configuration
 [tool:pytest]
 testpaths =
-    python_mvp
+    gecrooks_python_template
 
 
 # Configuration for test coverage
@@ -319,7 +322,7 @@ testpaths =
 
 [coverage:paths]
 source =
-    python_mvp
+    gecrooks_python_template
 
 [coverage:run]
 omit =
@@ -376,12 +379,12 @@ It's common practice to add a copyright and license notice to the top of every s
 
 ```
 
-I tend to forget to add these lines. So let's add a unit test `python_mvp/config_test.py::test_copyright` to make sure we don't.
+I tend to forget to add these lines. So let's add a unit test `gecrooks_python_template/config_test.py::test_copyright` to make sure we don't.
 ```
 def test_copyright():
     """Check that source code files contain a copyright line"""
-    exclude = set(['python_mvp/version.py'])
-    for fname in glob.glob('python_mvp/**/*.py', recursive=True):
+    exclude = set(['gecrooks_python_template/version.py'])
+    for fname in glob.glob('gecrooks_python_template/**/*.py', recursive=True):
         if fname in exclude:
             continue
         print("Checking " + fname + " for copyright header")
@@ -436,7 +439,7 @@ $ git add Makefile *.*
 I like to add a Makefile with targets for all of the common development tools I need to run. This is partially for convenience, and partially as documentation, i.e. here are all the commands you need to run to test, lint, typecheck, and build the code (and so on.) I use a [clever hack](https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html) so that the makefile self documents.
 
 ```
-(MVP) $ make
+(GTP) $ make
 all          Run all tests
 test         Run unittests
 coverage     Report test coverage
@@ -517,16 +520,16 @@ jobs:
         python -m pip install -e .[dev]  # install package + test dependencies
     - name: About
       run: |
-        python -m python_mvp.about
+        python -m $(python -Wi setup.py --name).about
     - name: Lint with flake8
       run: |
         flake8 .
     - name: Test with pytest
       run: |
-        python -m pytest --cov=python_mvp --cov-fail-under 100
+        python -m pytest --cov-fail-under 100
     - name: Typecheck with mypy
       run: |
-        mypy python_mvp
+        mypy
     - name: Build documentation with sphinx
       run: |
         sphinx-build -M html docs docs/_build
@@ -554,10 +557,10 @@ Changes to be committed:
     new file:   docs/conf.py
     new file:   docs/index.rst
     new file:   pyproject.toml
-    new file:   python_mvp/__init__.py
-    new file:   python_mvp/about.py
-    new file:   python_mvp/config.py
-    new file:   python_mvp/config_test.py
+    new file:   gecrooks_python_template/__init__.py
+    new file:   gecrooks_python_template/about.py
+    new file:   gecrooks_python_template/config.py
+    new file:   gecrooks_python_template/config_test.py
     new file:   setup.cfg
     new file:   setup.py
     
@@ -586,27 +589,27 @@ We tag our release candidate so that we get a clean version number (pypi will ob
 
 First we push to the pypi's test repository.
 ```
-(MVP) $ python -m twine upload --repository testpypi dist/*
+(GTP) $ python -m twine upload --repository testpypi dist/*
 ```
 You'll need to create a pypi account if you don't already have one. 
 
 Let's make sure it worked by installing from pypi into a fresh conda environment.
 ```
-(MVP) $ conda deactivate
+(GTP) $ conda deactivate
 $ conda create --name tmp
 $ conda activate tmp
-(tmp) $ pip install --index-url https://test.pypi.org/simple/ --no-deps python_mvp
-(tmp) $ python -m python_mvp.about
+(tmp) $ pip install --index-url https://test.pypi.org/simple/ --no-deps gecrooks-python-template
+(tmp) $ python -m gecrooks_python_template.about
 (tmp) $ conda activate QC
 ```
 
 It's a good idea to install Dave Shawley's [setupext-janitor](https://github.com/dave-shawley/setupext-janitor).
 ```
-(MVP) $ pip install -q setupext-janitor
+(GTP) $ pip install -q setupext-janitor
 ```
 Setuptools has a clean command to remove build files, but it doesn't actually do a good job of cleaning up after itself. But with `setupext-janitor` installed we can remove all of the files that the build process generates.
 ```
-(MVP) $ ./setup.py clean --all
+(GTP) $ ./setup.py clean --all
 ```
 
 ## Merge and Tag

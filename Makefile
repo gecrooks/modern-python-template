@@ -4,7 +4,7 @@
 
 .DEFAULT_GOAL := help
 
-PROJECT = python_mvp
+PROJECT = gecrooks_python_template
 FILES = $(PROJECT) docs/conf.py setup.py
 
 help:

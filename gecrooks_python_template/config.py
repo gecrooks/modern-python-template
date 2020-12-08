@@ -23,7 +23,7 @@ except ImportError:  # pragma: no cover
 __all__ = ["__version__", "about"]
 
 
-package_name = "python_mvp"
+package_name = "gecrooks_python_template"
 
 try:
     __version__ = importlib_metadata.version(package_name)  # type: ignore
@@ -33,9 +33,9 @@ except Exception:  # pragma: no cover
 
 
 def about(file: typing.TextIO = None) -> None:
-    """Print information about the configuration
+    f"""Print information about the configuration
 
-     ``> python -m python_mvp.about``
+     ``> python -m {package_name}.about``
 
     Args:
         file: Output stream (Defaults to stdout)
@@ -54,7 +54,7 @@ def about(file: typing.TextIO = None) -> None:
             pass
 
     print(file=file)
-    print("# Configuration (> python -m python_mvp.about)", file=file)
+    print(f"# Configuration (> python -m {package_name}.about)", file=file)
     for name, vers in versions.items():
         print(name.ljust(name_width), vers, file=file)
     print(file=file)
