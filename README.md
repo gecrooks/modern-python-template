@@ -136,7 +136,8 @@ url = https://github.com/gecrooks/gecrooks_python_template/
 author = Gavin Crooks
 author_email = gavincrooks@gmail.com
 description = "Minimal Viable Product for an open source, github hosted, python package"
-long_description= file:README.md
+long_description = file:README.md
+long_description_content_type = text/markdown
 license_file = LICENSE
 license = Apache-2.0
 
