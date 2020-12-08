@@ -4,7 +4,7 @@
 name: Python package
 
 env:
-  package_name: python_mvp ${{ package_name }}
+  package_name: python_mvp
 
 on:
   push:
