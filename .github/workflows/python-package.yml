@@ -3,9 +3,6 @@
 
 name: Python package
 
-env:
-  package_name: python_mvp
-
 on:
   push:
     branches: [ master ]
@@ -35,10 +32,10 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi        
     - name: About
       run: |
-        python -m ${{ package_name }}.about
+        python -m python_mvp.about
     - name: Test with pytest
       run: |
-        python -m pytest --cov=${{ package_name }} --cov-fail-under 100
+        python -m pytest --cov=python_mvp --cov-fail-under 100
     - name: Lint with black and isort (run `make delint` to fix issues)
       run: |
         black --check .  
@@ -48,7 +45,7 @@ jobs:
         flake8 .            
     - name: Typecheck with mypy
       run: |
-        mypy ${{ package_name }}
+        mypy python_mvp
     - name: Build documentation with sphinx
       run: |
         sphinx-build -M html docs docs/_build
