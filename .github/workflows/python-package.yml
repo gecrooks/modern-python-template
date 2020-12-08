@@ -32,7 +32,7 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi        
     - name: About
       run: |
-        python -W ignore -m $(./setup.py --name).about
+        python -Wignore -m $(./setup.py --name).about
     - name: Test with pytest
       run: |
         python -m pytest --cov-fail-under 100
