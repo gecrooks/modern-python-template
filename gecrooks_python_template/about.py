@@ -10,6 +10,6 @@
 # (else we will get multiple import warnings)
 
 if __name__ == "__main__":
-    import python_mvp
+    import gecrooks_python_template
 
-    python_mvp.about()
+    gecrooks_python_template.about()
