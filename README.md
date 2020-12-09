@@ -23,7 +23,7 @@ This is a discussion of the steps needed to setup an open source, github hosted,
 
 The first decision to make is the name of the project. And for python packages the most important criteria is that the name isn't already taken on [pypi](https://pypi.org/), the repository from which we install python packages with `pip`. So we should do a quick Internet search: This name is available on pypi, there are no other repos of that name on github, and a google search doesn't pull up anything relevant. So we're good to go. 
 
-Note that github repo and pypi packages are named using dashes (`-`), but that the corresponsing python module are named with underscores (`_`).
+Note that github repo and pypi packages are named using dashes (`-`), but that the corresponsing python module are named with underscores (`_`). (The reason for this dichotomy appears to be that underscores don't work well in URLs, but dashes are frowned upon in filenames.)
 
 ## License
 
@@ -333,7 +333,7 @@ exclude_lines =
 
 We have to explicitly omit the unit tests since we have placed the test files in the same directories as the code to test.
 
-The pragam "pragma: no cover" is used to mark untestable lines. This often happens with conditional imports used for backwards compatibility between python versions. 
+The pragam `pragma: no cover` is used to mark untestable lines. This often happens with conditional imports used for backwards compatibility between python versions. 
 
 
 ## Linting
@@ -480,7 +480,7 @@ A handy trick is to add Build Status and Documentation Status badges for Github 
 
 Another brilliant advance to software engineering practice is continuous integration (CI). The basic idea is that all code gets thoroughly tested before it's added to the master branch.
 
-Github now makes this very easy to setup with Github actions. They even provcide basic templates. This testing workflow lives in `.github/workflows/python-package.yml`, and is a modification of Github's  `python-package` workflow.
+Github now makes this very easy to setup with Github actions. They even provide basic templates. This testing workflow lives in `.github/workflows/python-build.yml`, and is a modification of Github's  `python-package.yml` workflow.
 ```
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
@@ -655,13 +655,13 @@ $ git push
 
 ## Tag and release
 
-Assuming everything went well, you can now upload a release to pypi proper. We can add a [github workflow](.github/workflows/python-publish.yml) to automatically upload new releases tagged on github. The only additioanl configuration is to upload `PYPI_USERNAME` and `PYPI_PASSWORD` to github as secrets (under you repo settings). 
+Assuming everything went well, you can now upload a release to pypi proper. We can add a [github workflow](.github/workflows/python-publish.yml) to automatically upload new releases tagged on github. The only additional configuration is to upload `PYPI_USERNAME` and `PYPI_PASSWORD` to github as secrets (under you repo settings). 
 
 
 
 ## Conclusion
 
-By my count we have 14 configuration files (In python, toml, yaml, INI, gitignore, Makefile, and plain text formats), 2 documentation files, one file of unit tests, and 3 files of code (containing 31 lines of code). We're now ready to create a new git branch and start coding in earnest.
+By my count we have 13 configuration files (In python, toml, yaml, INI, gitignore, Makefile, and plain text formats), 2 documentation files, one file of unit tests, and 3 files of code (containing 31 lines of code). We're now ready to create a new git branch and start coding in earnest.
 
 
 ## License
