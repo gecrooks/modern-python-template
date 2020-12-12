@@ -21,13 +21,9 @@ coverage:	## Report test coverage
 	@echo
 
 lint:		## Lint check python source
-	@echo
-	isort --check -m 3 --tc $(PROJECT)  || echo "FAILED isort!"
-	@echo
-	black --diff --color $(PROJECT)  || echo "FAILED black"
-	@echo
-	flake8 $(FILES)  || echo "FAILED flake8"
-	@echo
+	@isort --check -m 3 --tc $(PROJECT)  ||  echo "isort:   FAILED!"
+	@black --check --quiet $(PROJECT)    || echo "black:   FAILED!"
+	@flake8 --quiet --quiet --output-file=/dev/null $(FILES) || echo "flake8:  FAILED!"
 
 delint:   ## Run isort and black to delint project
 	@echo	

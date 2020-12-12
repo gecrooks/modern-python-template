@@ -23,7 +23,7 @@ This is a discussion of the steps needed to setup an open source, github hosted,
 
 The first decision to make is the name of the project. And for python packages the most important criteria is that the name isn't already taken on [pypi](https://pypi.org/), the repository from which we install python packages with `pip`. So we should do a quick Internet search: This name is available on pypi, there are no other repos of that name on github, and a google search doesn't pull up anything relevant. So we're good to go. 
 
-Note that github repo and pypi packages are named using dashes (`-`), but that the corresponsing python module are named with underscores (`_`). (The reason for this dichotomy appears to be that underscores don't work well in URLs, but dashes are frowned upon in filenames.)
+Note that github repo and pypi packages are named using dashes (`-`), but that the corresponding python module are named with underscores (`_`). (The reason for this dichotomy appears to be that underscores don't work well in URLs, but dashes are frowned upon in filenames.)
 
 ## License
 
@@ -303,7 +303,7 @@ In tests we want to access our code in the same way we would access it from the 
 
 At a bare minimum the unit tests should run (almost) every line of code. If a line of code never runs, then how do you know it works at all?
 
-So we want to monitor the test coverage. The [pytest-cov](https://pypi.org/project/pytest-cov/) plugin to pytest will do this for us. Configuration is placed in the setup.cfg file (Config can also be placed in a seperate `.coveragerc`, but I think its better to avoid a proliferation of configuration files.)
+So we want to monitor the test coverage. The [pytest-cov](https://pypi.org/project/pytest-cov/) plugin to pytest will do this for us. Configuration is placed in the setup.cfg file (Config can also be placed in a separate `.coveragerc`, but I think its better to avoid a proliferation of configuration files.)
 ```
 # pytest configuration
 [tool:pytest]
@@ -666,7 +666,7 @@ By my count we have 13 configuration files (In python, toml, yaml, INI, gitignor
 
 ## License
 
-This software template is public domain. The included open-source software license `LICENSE.txt` and copyright lines are for illustrative purposes only. If you wish to use this template as the basis of your own project, you should feel free to assert your own copyrights (at the top of the python source code files) and subsitute your own choice of software license. 
+This software template is public domain. The included open-source software license `LICENSE.txt` and copyright lines are for illustrative purposes only. If you wish to use this template as the basis of your own project, you should feel free to assert your own copyrights (at the top of the python source code files) and substitute your own choice of software license.
 
 Gavin E. Crooks (2020)
 
