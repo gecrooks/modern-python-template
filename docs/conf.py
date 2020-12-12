@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "python_mvp"
+project = "gecrooks-python-template"
 copyright = "2020, Gavin Crooks"
 author = "Gavin Crooks"
 
