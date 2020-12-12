@@ -4,8 +4,12 @@
 
 .DEFAULT_GOAL := help
 
-PROJECT = gecrooks_python_template
-FILES = $(PROJECT) docs/conf.py setup.py
+$(eval NAME = $(shell ./setup.py --name))
+FILES = $(NAME) docs/conf.py setup.py
+
+blob:
+	echo $(NAME)
+
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -21,19 +25,19 @@ coverage:	## Report test coverage
 	@echo
 
 lint:		## Lint check python source
-	@isort --check -m 3 --tc $(PROJECT)  ||  echo "isort:   FAILED!"
-	@black --check --quiet $(PROJECT)    || echo "black:   FAILED!"
+	@isort --check -m 3 --tc $(NAME)  ||  echo "isort:   FAILED!"
+	@black --check --quiet $(NAME)    || echo "black:   FAILED!"
 	@flake8 --quiet --quiet --output-file=/dev/null $(FILES) || echo "flake8:  FAILED!"
 
 delint:   ## Run isort and black to delint project
 	@echo	
-	isort -m 3 --tc $(PROJECT)
+	isort -m 3 --tc $(NAME)
 	@echo
-	black $(PROJECT)
+	black $(NAME)
 	@echo
 
 typecheck:	## Static typechecking 
-	mypy $(PROJECT)
+	mypy $(NAME)
 
 docs:		## Build documentation
 	(cd docs; make html)
@@ -76,7 +80,7 @@ pragmas:	## Report all pragmas in code
 	@grep '# type:' --color -r -n $(FILES) || echo "No Typecheck Pragmas"
 
 about:	## Report versions of dependent packages
-	@python -m $(PROJECT).about
+	@python -m $(NAME).about
 
 status:  ## git status -uno
 	@echo
