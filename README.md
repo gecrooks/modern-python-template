@@ -134,22 +134,23 @@ All of the rest of the metadata goes in `setup.cfg` (in INI format).
 [metadata]
 # https://packaging.python.org/specifications/core-metadata/
 # https://www.python.org/dev/peps/pep-0639/
+# SPDX license short-form identifier, https://spdx.org/licenses/
 
 Metadata-Version: 2.2
 Name = gecrooks_python_template
 Summary = Minimal viable setup for an open source, github hosted, python package
-Description = file:README.md
-Description-Content-Type = text/markdown
+Long-Description = file:README.md
+Long-Description-Content-Type = text/markdown
 Keywords = python,template
 Home-page = https://github.com/gecrooks/gecrooks-python-template/
 Author = Gavin E. Crooks
 Author-email = gec@threeplusone.com
-License = Apache-2.0    # SPDX license short-form identifier, https://spdx.org/licenses/
+License = Apache-2.0
 License-File = LICENSE
 
 # https://pypi.org/classifiers/
 Classifiers=
-    Development Status :: 5 - Stable
+    Development Status :: 4 - Beta
     Intended Audience :: Developers
     Intended Audience :: Science/Research
     Programming Language :: Python
@@ -159,7 +160,7 @@ Classifiers=
     Programming Language :: Python :: 3.7
     Programming Language :: Python :: 3.8
     Programming Language :: Python :: 3.9
-    Topic :: Scientific/Engineering     
+    Topic :: Scientific/Engineering
     Topic :: Software Development
     Topic :: Software Development :: Libraries
     Topic :: Software Development :: Libraries :: Python Modules
@@ -189,6 +190,7 @@ dev =
     sphinx
     sphinxcontrib-bibtex
     setuptools_scm
+
 
 ```
 
