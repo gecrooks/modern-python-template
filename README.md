@@ -1,4 +1,4 @@
-# gecrooks-python-template: Minimal viable setup for an open source, github hosted, python package
+# gecrooks-python-template: Minimal viable setup for an open source, github hosted, python package 
 
 
 ![Build Status](https://github.com/gecrooks/gecrooks-python-template/workflows/Build/badge.svg) [![Documentation Status](https://readthedocs.org/projects/gecrooks-python-template/badge/?version=latest)](https://gecrooks-python-template.readthedocs.io/en/latest/?badge=latest)
