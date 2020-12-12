@@ -29,6 +29,7 @@ Note that github repo and pypi packages are named using dashes (`-`), but that t
 
 The next decision is which of the plethora of [Open Source](https://opensource.org/licenses) licenses to use. We'll use the [Apache License](https://opensource.org/licenses/Apache-2.0), a perfectly reasonable, and increasingly popular choice. 
 
+(If you want to use a different license, replace the `LICENSE` file, update the `License` field in `setup.cfg`, and change the blurb at the top of each file of python code.)
 
 ## Create repo
 
@@ -131,55 +132,69 @@ All of the rest of the metadata goes in `setup.cfg` (in INI format).
 # [INI](https://docs.python.org/3/install/index.html#inst-config-syntax) file format.
 
 [metadata]
-name = gecrooks-python-template
-url = https://github.com/gecrooks/gecrooks_python_template/
-author = Gavin Crooks
-author_email = gavincrooks@gmail.com
-description = "Minimal Viable Product for an open source, github hosted, python package"
-long_description = file:README.md
-long_description_content_type = text/markdown
-license_file = LICENSE
-license = Apache-2.0
+# https://packaging.python.org/specifications/core-metadata/
+# https://www.python.org/dev/peps/pep-0639/
+# SPDX license short-form identifier, https://spdx.org/licenses/
 
-classifiers=
+Metadata-Version: 2.2
+Name = gecrooks_python_template
+Summary = Minimal viable setup for an open source, github hosted, python package
+Long-Description = file:README.md
+Long-Description-Content-Type = text/markdown
+Keywords = python,template
+Home-page = https://github.com/gecrooks/gecrooks-python-template/
+Author = Gavin E. Crooks
+Author-email = gec@threeplusone.com
+License = Apache-2.0
+License-File = LICENSE
+
+# https://pypi.org/classifiers/
+Classifiers=
     Development Status :: 4 - Beta
+    Intended Audience :: Developers
     Intended Audience :: Science/Research
-    License :: OSI Approved :: Apache Software License
-    Topic :: Scientific/Engineering
     Programming Language :: Python
     Natural Language :: English
-    Topic :: Software Development :: Libraries
-    Topic :: Software Development :: Libraries :: Python Modules
+    Operating System :: OS Independent    
     Programming Language :: Python :: 3
     Programming Language :: Python :: 3.7
     Programming Language :: Python :: 3.8
-    Operating System :: OS Independent
+    Programming Language :: Python :: 3.9
+    Topic :: Scientific/Engineering
+    Topic :: Software Development
+    Topic :: Software Development :: Libraries
+    Topic :: Software Development :: Libraries :: Python Modules
+    Typing :: Typed
 
- 
 [options]
 zip_safe = True
 python_requires = >= 3.7
+packages = find:
 
-# importlib_metadata required for python 3.7
 install_requires =
-    importlib_metadata
-    numpy
+    importlib_metadata   # required for python 3.7
+    numpy                # example
 
 setup_requires =
   setuptools_scm
 
+
 [options.extras_require]
 dev =
-    pytest
+    pytest >= 4.6
     pytest-cov
     flake8
     mypy
+    black
+    isort
     sphinx
     sphinxcontrib-bibtex
     setuptools_scm
+
+
 ```
 
-It's good practice to support at least two consecutive versions of python. Starting with 3.9, python is moving to an annual [release schedule](https://www.python.org/dev/peps/pep-0602/). The initial 3.x.0 release will be in early October and the first bug patch 3.x.1 in early December, second in February, and so on.  Since it takes many important packages some time to upgrade (e.g. numpy and tensorflow are often bottlenecks), one should probably plan to upgrade python support around February each year. Upgrading involves changing the python version numbers in the tests and `config.cfg`, and then cleaning up any `__future__` or conditional imports, or other hacks added to maintain compatibility with older python releases. 
+It's good practice to support at least two consecutive versions of python. Starting with 3.9, python is moving to an annual [release schedule](https://www.python.org/dev/peps/pep-0602/). The initial 3.x.0 release will be in early October and the first bug patch 3.x.1 in early December, second in February, and so on.  Since it takes many important packages some time to upgrade (e.g. numpy and tensorflow are often bottlenecks), one should probably plan to upgrade python support by February each year. Upgrading involves changing the python version numbers in the tests and `config.cfg`, and then cleaning up any `__future__` or conditional imports, or other hacks added to maintain compatibility with older python releases. 
 
 
 We can now install our package (as editable -e, so that the code in our repo is live).
