@@ -5,14 +5,13 @@
 
 [Source](https://github.com/gecrooks/gecrooks-python-template)
 
+## Quickstart
 
-## Installation for development
+This is a [cookiecutter]() python template for a minimal python package. 
+Install and run cookiecutter, answer the configuration questions, and you should be good to go.
 
-```
-$ git clone https://github.com/gecrooks/gecrooks-python-template.git
-$ cd gecrooks-python-template
-$ pip install -e .[dev]
-```
+    pip install -U cookiecutter
+    cookiecutter https://github.com/audreyfeldroy/cookiecutter-pypackage.git
 
 
 ## About: On the creation and crafting of a python project
@@ -29,7 +28,6 @@ Note that github repo and pypi packages are named using dashes (`-`), but that t
 
 The next decision is which of the plethora of [Open Source](https://opensource.org/licenses) licenses to use. We'll use the [Apache License](https://opensource.org/licenses/Apache-2.0), a perfectly reasonable, and increasingly popular choice. 
 
-(If you want to use a different license, replace the `LICENSE` file, update the `License` field in `setup.cfg`, and change the blurb at the top of each file of python code.)
 
 ## Create repo
 
@@ -377,7 +375,7 @@ We need to override the linter on occasion. We add pragma such as `# noqa: F401`
 
 Two other python code format tools to consider using are [isort](https://pypi.org/project/isort/) and [black, The uncompromising code formatter](https://black.readthedocs.io/en/stable/). Isort sorts your import statements into a canonical order. And Black is the Model-T Ford of code formatting -- any format you want, so long as it's Black. I could quibble about some of Black's code style, but in the end it's just easier to blacken your code and accept black's choices, and thereby gain a consistent coding style across developers. 
 
-The command `make delint` will run these `isort` and `black` on your code, with the right magic incantations so that they are compatible.
+The command `make delint` will run these `isort` and `black` on your code, with the right magic incantations so that they are compatible. (`isort --profile black` which appears to be equivalent to `isort -m 3 --tc --line-length 88`. We set this configuration project wide in `setup.cfg`)
 
 
 ## Copyright
@@ -386,8 +384,8 @@ It's common practice to add a copyright and license notice to the top of every s
 
 # Copyright 2019-, Gavin E. Crooks and contributors
 #
-# This source code is licensed under the Apache License, Version 2.0 found in
-# the LICENSE.txt file in the root directory of this source tree.
+# This source code is licensed under the Apache License, Version 2.0
+# found in the LICENSE file in the root directory of this source tree.
 
 ```
 
@@ -673,37 +671,33 @@ $ git push
 Assuming everything went well, you can now upload a release to pypi proper. We can add a [github workflow](.github/workflows/python-publish.yml) to automatically upload new releases tagged on github. The only additional configuration is to upload `PYPI_USERNAME` and `PYPI_PASSWORD` to github as secrets (under you repo settings). 
 
 
+## Cookiecutter
+
+Having shorted out our basic module configuration and layout, the next trick is to turn the package into a 
+[cookiecutter](https://cookiecutter.readthedocs.io/) project template. That way we can create a new project in
+just a few moments.
+
+    pip install -U cookiecutter
+    cookiecutter https://github.com/gecrooks/gecrooks-python-template.git
+  
+Answer the questions and one should be good to go.
+
+The basic idea is to replace customizable text with  template strings, e.g. `{{cookiecutter.author_email}}`. 
+Defaults for these templates are stored in `cookiecutter.json`. In particular the whole package is moved to a directory called 
+`{{cookiecutter.module_name}}`, and the module code is moved to 
+`{{cookiecutter.module_name}}/{{cookiecutter.module_name}}`. 
+I'm more or less following [cookiecutter-pypackage])https://github.com/audreyfeldroy/cookiecutter-pypackage)
+
+One tricky bit is that some of the github configuration files already contain similar template strings. So we have to
+wrap those strings in special raw tags.
+
+    {% raw %} some stuff with {templates} {% endraw %}
+
+I also added some pre- and post- templating hooks (in the `hooks` subdirectory). These initialize and tag a git repo in the  created module, and pip install the package.
+
 
 ## Conclusion
 
-By my count we have 13 configuration files (In python, toml, yaml, INI, gitignore, Makefile, and plain text formats), 2 documentation files, one file of unit tests, and 3 files of code (containing 31 lines of code). We're now ready to create a new git branch and start coding in earnest.
+By my count our minimal project has 13 configuration files (In python, toml, yaml, INI, gitignore, Makefile, and plain text formats), 2 documentation files, one file of unit tests, and 3 files of code (containing 31 lines of code). 
 
-
-## License
-
-This software template is public domain. The included open-source software license `LICENSE.txt` and copyright lines are for illustrative purposes only. If you wish to use this template as the basis of your own project, you should feel free to assert your own copyrights (at the top of the python source code files) and substitute your own choice of software license.
-
-Gavin E. Crooks (2020)
-
-    This is free and unencumbered software released into the public domain.
-
-    Anyone is free to copy, modify, publish, use, compile, sell, or
-    distribute this software, either in source code form or as a compiled
-    binary, for any purpose, commercial or non-commercial, and by any
-    means.
-
-    In jurisdictions that recognize copyright laws, the author or authors
-    of this software dedicate any and all copyright interest in the
-    software to the public domain. We make this dedication for the benefit
-    of the public at large and to the detriment of our heirs and
-    successors. We intend this dedication to be an overt act of
-    relinquishment in perpetuity of all present and future rights to this
-    software under copyright law.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-    IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-    OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-    ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-    OTHER DEALINGS IN THE SOFTWARE.
+We're now ready to create a new git branch and start coding in earnest.

@@ -4,7 +4,7 @@
 
 .DEFAULT_GOAL := help
 
-$(eval NAME = $(shell ./setup.py --name))
+NAME = {{cookiecutter.module_name}}
 FILES = $(NAME) docs/conf.py setup.py
 
 help:
