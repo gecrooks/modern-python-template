@@ -1,0 +1,9 @@
+{
+  "project_name": "My Python Project",
+  "module_name": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
+  "short_description": "A short description of this project",
+  "author_name": "Some Body",
+  "author_email": "somebody@example.com",
+  "copywrite": "2021, {{ cookiecutter.author_name }} and contributors",
+  "github_username": "somebody"
+}

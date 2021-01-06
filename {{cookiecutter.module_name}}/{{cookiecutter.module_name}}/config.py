@@ -1,7 +1,7 @@
-# Copyright 2019-2021, Gavin E. Crooks and contributors
+# Copyright {{cookiecutter.copywrite}}
 #
-# This source code is licensed under the Apache License 2.0 found in
-# the LICENSE.txt file in the root directory of this source tree.
+# This source code is licensed under the Apache License 2.0
+# found in the LICENSE file in the root directory of this source tree.
 
 """
 Package wide configuration
