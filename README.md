@@ -375,7 +375,7 @@ We need to override the linter on occasion. We add pragma such as `# noqa: F401`
 
 Two other python code format tools to consider using are [isort](https://pypi.org/project/isort/) and [black, The uncompromising code formatter](https://black.readthedocs.io/en/stable/). Isort sorts your import statements into a canonical order. And Black is the Model-T Ford of code formatting -- any format you want, so long as it's Black. I could quibble about some of Black's code style, but in the end it's just easier to blacken your code and accept black's choices, and thereby gain a consistent coding style across developers. 
 
-The command `make delint` will run these `isort` and `black` on your code, with the right magic incantations so that they are compatible.
+The command `make delint` will run these `isort` and `black` on your code, with the right magic incantations so that they are compatible. (`isort --profile black` which appears to be equivalent to `isort -m 3 --tc --line-length 88`. We set this configuration project wide in `setup.cfg`)
 
 
 ## Copyright
