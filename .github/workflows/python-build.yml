@@ -34,6 +34,7 @@ jobs:
         cd my_python_project
 
         git init
+        git add -A
         git commit -m "mesag"
         git tag v0.0.0 
     - name: Install dependencies
