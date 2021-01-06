@@ -51,6 +51,7 @@ jobs:
         isort --check -m 3 --tc --line-length 88 my_python_project hooks
     - name: Lint with flake8
       run: |
+        cd my_python_project
         flake8 .            
     - name: Typecheck with mypy
       run: |
