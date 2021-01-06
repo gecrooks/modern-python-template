@@ -39,9 +39,11 @@ jobs:
         python -m pip install .[dev]  # install package + test dependencies
     - name: About
       run: |
+        cd my_python_project 
         python -m $(python -Wi setup.py --name).about
     - name: Test with pytest
       run: |
+        cd my_python_project 
         python -m pytest --cov-fail-under 100
     - name: Lint with black and isort (run `make delint` to fix issues)
       run: |
@@ -52,7 +54,9 @@ jobs:
         flake8 .            
     - name: Typecheck with mypy
       run: |
+        cd my_python_project 
         mypy
     - name: Build documentation with sphinx
       run: |
+        cd my_python_project 
         sphinx-build -M html docs docs/_build
