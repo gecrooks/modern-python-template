@@ -18,4 +18,4 @@ def git_init_and_tag():
     )
 
 
-# git_init_and_tag()
+git_init_and_tag()
