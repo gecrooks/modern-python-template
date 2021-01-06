@@ -671,12 +671,6 @@ $ git push
 Assuming everything went well, you can now upload a release to pypi proper. We can add a [github workflow](.github/workflows/python-publish.yml) to automatically upload new releases tagged on github. The only additional configuration is to upload `PYPI_USERNAME` and `PYPI_PASSWORD` to github as secrets (under you repo settings). 
 
 
-
-## Conclusion
-
-By my count we have 13 configuration files (In python, toml, yaml, INI, gitignore, Makefile, and plain text formats), 2 documentation files, one file of unit tests, and 3 files of code (containing 31 lines of code). 
-
-
 ## Cookiecutter
 
 Having shorted out our basic module configuration and layout, the next trick is to turn the package into a 
@@ -691,7 +685,8 @@ Answer the questions and one should be good to go.
 The basic idea is to replace customizable text with  template strings, e.g. `{{cookiecutter.author_email}}`. 
 Defaults for these templates are stored in `cookiecutter.json`. In particular the whole package is moved to a directory called 
 `{{cookiecutter.module_name}}`, and the module code is moved to 
-`{{cookiecutter.module_name}}/{{cookiecutter.module_name}}`.
+`{{cookiecutter.module_name}}/{{cookiecutter.module_name}}`. 
+I'm more or less following [cookiecutter-pypackage])https://github.com/audreyfeldroy/cookiecutter-pypackage)
 
 One tricky bit is that some of the github configuration files already contain similar template strings. So we have to
 wrap those strings in special raw tags.
@@ -702,5 +697,7 @@ I also added some pre- and post- templating hooks (in the `hooks` subdirectory).
 
 
 ## Conclusion
+
+By my count our minimal project has 13 configuration files (In python, toml, yaml, INI, gitignore, Makefile, and plain text formats), 2 documentation files, one file of unit tests, and 3 files of code (containing 31 lines of code). 
 
 We're now ready to create a new git branch and start coding in earnest.

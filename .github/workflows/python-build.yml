@@ -26,9 +26,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Cut cookies
       run: |
+        python -m pip install cookiecutter
         cookiecutter --no-input .
         cd my_python_project      
-    - name: Install dependancies
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi         

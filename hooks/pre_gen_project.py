@@ -1,14 +1,12 @@
-
 import re
 import sys
 
+MODULE_REGEX = r"^[_a-zA-Z][_a-zA-Z0-9]+$"
+EMAIL_REGEX = r"[^@]+@[^@]+\.[^@]+"
 
-MODULE_REGEX = r'^[_a-zA-Z][_a-zA-Z0-9]+$'
-EMAIL_REGEX = r'[^@]+@[^@]+\.[^@]+'
 
-
-module_name = '{{cookiecutter.module_name}}'
-author_email = '{{cookiecutter.author_email}}'
+module_name = "{{cookiecutter.module_name}}"
+author_email = "{{cookiecutter.author_email}}"
 
 
 if not re.match(MODULE_REGEX, module_name):
