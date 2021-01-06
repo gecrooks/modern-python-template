@@ -11,7 +11,7 @@ This is a [cookiecutter]() python template for a minimal python package.
 Install and run cookiecutter, answer the configuration questions, and you should be good to go.
 
     pip install -U cookiecutter
-    cookiecutter https://github.com/audreyfeldroy/cookiecutter-pypackage.git
+    cookiecutter https://github.com/gecrooks/gecrooks-python-template.git
 
 
 ## About: On the creation and crafting of a python project
