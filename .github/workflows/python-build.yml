@@ -28,8 +28,11 @@ jobs:
     - name: Cut cookies
       run: |
         python -m pip install cookiecutter
+        git config --global user.email "you@example.com"
+        git config --global user.name "Your Name"
         cookiecutter --no-input .
         cd my_python_project
+
         git init
         git commit -m "mesag"
         git tag v0.0.0 
