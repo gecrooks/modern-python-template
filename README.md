@@ -13,6 +13,15 @@ Install and run cookiecutter, answer the configuration questions, and you should
     pip install -U cookiecutter
     cookiecutter https://github.com/gecrooks/gecrooks-python-template.git
 
+To complete github setup, create a new empty repo on github with the same name, add origin to our
+project, and push to github.
+
+    cd my_python_project
+    git remote add origin https://github.com/somebody/my_python_project.git
+    git push -u origin master
+    git push origin v0.0.0
+
+On github, you'll want to complete the About section (project description, website, and topics), add your PyPi user name and password as Secrets (if you're planning to upload to PyPi), and protect the [master branch](https://amachreeowanate.medium.com/how-to-protect-the-master-branch-on-github-ab85e9b6b03).
 
 ## About: On the creation and crafting of a python project
 
@@ -22,7 +31,7 @@ This is a discussion of the steps needed to setup an open source, github hosted,
 
 The first decision to make is the name of the project. And for python packages the most important criteria is that the name isn't already taken on [pypi](https://pypi.org/), the repository from which we install python packages with `pip`. So we should do a quick Internet search: This name is available on pypi, there are no other repos of that name on github, and a google search doesn't pull up anything relevant. So we're good to go. 
 
-Note that github repo and pypi packages are named using dashes (`-`), but that the corresponding python module are named with underscores (`_`). (The reason for this dichotomy appears to be that underscores don't work well in URLs, but dashes are frowned upon in filenames.)
+Note that github repo and pypi packages are generally named using dashes (`-`), but that the corresponding python module are named with underscores (`_`). (The reason for this dichotomy appears to be that underscores don't work well in URLs, but dashes are frowned upon in filenames.)
 
 ## License
 
@@ -342,11 +351,14 @@ omit =
 # Use ``# pragma: no cover`` to exclude specific lines
 exclude_lines =
     pragma: no cover
+    except ImportError
+    assert False
+    raise NotImplementedError()
 ```
 
 We have to explicitly omit the unit tests since we have placed the test files in the same directories as the code to test.
 
-The pragam `pragma: no cover` is used to mark untestable lines. This often happens with conditional imports used for backwards compatibility between python versions. 
+The [pragma](https://en.wikipedia.org/wiki/Directive_(programming)) `pragma: no cover` is used to mark untestable lines. This often happens with conditional imports used for backwards compatibility between python versions. The other excluded lines are common patterns of code that doesn't need test coverage.
 
 
 ## Linting
@@ -680,7 +692,12 @@ just a few moments.
     pip install -U cookiecutter
     cookiecutter https://github.com/gecrooks/gecrooks-python-template.git
   
-Answer the questions and one should be good to go.
+Answer the questions, create a new empty repo on github with the same name, push, and you should be good to go.
+
+    cd my_python_project
+    git remote add origin https://github.com/somebody/my_python_project.git
+    git push -u origin master
+
 
 The basic idea is to replace customizable text with  template strings, e.g. `{{cookiecutter.author_email}}`. 
 Defaults for these templates are stored in `cookiecutter.json`. In particular the whole package is moved to a directory called 
