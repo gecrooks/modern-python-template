@@ -4,7 +4,7 @@
   "short_description": "A short description of this example project",
   "author_name": "Some Body",
   "author_email": "somebody@example.com",
-  "copywrite": "2021, {{ cookiecutter.author_name }} and contributors",
+  "copywrite": "{% now 'local', '%Y' %}, {{ cookiecutter.author_name }} and contributors",
   "license": ["Apache-2.0", "MIT"],
   "github_username": "somebody",
   "initilize_git_repo": "y"
