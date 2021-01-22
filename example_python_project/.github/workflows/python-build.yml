@@ -4,9 +4,9 @@ name: Build
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ master ]
+    branches: [ main, master ]
   schedule:
     - cron: "0 13 * * *"  # Every day at 1pm UTC (6am PST)
 
@@ -20,43 +20,31 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python  ${{ matrix.python-version }} 
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
-    - name: Cut cookies
-      run: |
-        python -m pip install cookiecutter
-        git config --global user.email "you@example.com"
-        git config --global user.name "Your Name"
-        cookiecutter --no-input --overwrite-if-exists .
+        python-version:  ${{ matrix.python-version }} 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi  
-        cd example_python_project       
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi         
         python -m pip install .[dev]  # install package + test dependencies
     - name: About
       run: |
-        cd example_python_project 
         python -m $(python -Wi setup.py --name).about
     - name: Test with pytest
       run: |
-        cd example_python_project 
         python -m pytest --cov-fail-under 100
     - name: Lint with black and isort (run `make delint` to fix issues)
       run: |
-        black --check example_python_project hooks
-        isort --check example_python_project hooks
+        black --check .  
+        isort --check .
     - name: Lint with flake8
       run: |
-        cd example_python_project
         flake8 .            
     - name: Typecheck with mypy
       run: |
-        cd example_python_project 
         mypy
     - name: Build documentation with sphinx
       run: |
-        cd example_python_project
         sphinx-build -M html docs docs/_build
