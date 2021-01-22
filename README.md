@@ -1,7 +1,7 @@
 # gecrooks-python-template: Minimal viable setup for an open source, github hosted, python package
 
 
-![Build Status](https://github.com/gecrooks/gecrooks-python-template/workflows/Build/badge.svg) [![Documentation Status](https://readthedocs.org/projects/gecrooks-python-template/badge/?version=latest)](https://gecrooks-python-template.readthedocs.io/en/latest/?badge=latest)
+![Build Status](https://github.com/gecrooks/gecrooks-python-template/workflows/Build/badge.svg) 
 
 [Source](https://github.com/gecrooks/gecrooks-python-template)
 
@@ -165,7 +165,6 @@ Classifiers=
     Natural Language :: English
     Operating System :: OS Independent    
     Programming Language :: Python :: 3
-    Programming Language :: Python :: 3.7
     Programming Language :: Python :: 3.8
     Programming Language :: Python :: 3.9
     Topic :: Scientific/Engineering
@@ -176,11 +175,10 @@ Classifiers=
 
 [options]
 zip_safe = True
-python_requires = >= 3.7
+python_requires = >= 3.8
 packages = find:
 
 install_requires =
-    importlib_metadata   # required for python 3.7
     numpy                # example
 
 setup_requires =
@@ -202,7 +200,7 @@ dev =
 
 ```
 
-It's good practice to support at least two consecutive versions of python. Starting with 3.9, python is moving to an annual [release schedule](https://www.python.org/dev/peps/pep-0602/). The initial 3.x.0 release will be in early October and the first bug patch 3.x.1 in early December, second in February, and so on.  Since it takes many important packages some time to upgrade (e.g. numpy and tensorflow are often bottlenecks), one should probably plan to upgrade python support by February each year. Upgrading involves changing the python version numbers in the tests and `config.cfg`, and then cleaning up any `__future__` or conditional imports, or other hacks added to maintain compatibility with older python releases. 
+It's good practice to support at least two consecutive versions of python. Starting with 3.9, python is moving to an annual [release schedule](https://www.python.org/dev/peps/pep-0602/). The initial 3.x.0 release will be in early October and the first bug patch 3.x.1 in early December, second in February, and so on.  Since it takes many important packages some time to upgrade (e.g. numpy and tensorflow are often bottlenecks), one should probably plan to upgrade python support around the beginning of each year. Upgrading involves changing the python version numbers in the tests and `config.cfg`, and then cleaning up any `__future__` or conditional imports, or other hacks added to maintain compatibility with older python releases. If you protected the master branch on github, and added required status checks, you'll need to update those too.
 
 
 We can now install our package (as editable -e, so that the code in our repo is live).
@@ -223,12 +221,8 @@ My favored approach is use git tags as the source of truth (Option 7 in the abov
 The convention is that the version number of a python packages should be available as `packagename.__version__`. 
 So we add the following code to `example_python_project/config.py` to extract the version number metadata.
 ```
-try:
-    # python >= 3.8
-    from importlib import metadata as importlib_metadata  # type: ignore
-except ImportError:  # pragma: no cover
-    # python == 3.7
-    import importlib_metadata  # type: ignore  # noqa: F401
+
+from importlib import metadata as importlib_metadata 
 
 
 __all__ = ["__version__", "about"]
@@ -250,7 +244,7 @@ from .config import __version__ as __version__                      # noqa: F401
 ```
 We put the code to extract the version number in `config.py` and not `__init__.py`, because we don't want to pollute our top level package namespace. 
 
-The various pragmas in the code above ("pragma: no cover" and "type: ignore") are there because the conditional import needed for python 3.7 compatibility confuses both our type checker and code coverage tools.
+The various pragmas in the code above ("pragma: no cover" and "type: ignore") are there because the conditional imports confuse both our type checker and code coverage tools.
 
 ## about
 
@@ -527,7 +521,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.7', '3.8']
+        python-version: ['3.8', '3.9']
 
     steps:
     - uses: actions/checkout@v2
