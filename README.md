@@ -7,7 +7,7 @@
 
 ## Quickstart
 
-This is a [cookiecutter]() python template for a minimal python package. 
+This is a [cookiecutter](https://github.com/cookiecutter/cookiecutter) python template for a minimal python package. 
 Install and run cookiecutter, answer the configuration questions, and you should be good to go.
 
     pip install -U cookiecutter
@@ -16,8 +16,8 @@ Install and run cookiecutter, answer the configuration questions, and you should
 To complete github setup, create a new empty repo on github with the same name, add origin to our
 project, and push to github.
 
-    cd my_python_project
-    git remote add origin https://github.com/somebody/my_python_project.git
+    cd example_python_project
+    git remote add origin https://github.com/somebody/example_python_project.git
     git push -u origin master
     git push origin v0.0.0
 
@@ -26,6 +26,7 @@ On github, you'll want to complete the About section (project description, websi
 ## About: On the creation and crafting of a python project
 
 This is a discussion of the steps needed to setup an open source, github hosted, python package ready for further development.
+The minimal project we're building is located in the [example_python_project](example_python_project) subdirectory. The rest of the files in the repo are for a [cookiecutter](https://github.com/cookiecutter/cookiecutter) template to create the example python project.
 
 ## Naming
 
@@ -97,8 +98,8 @@ I tend to name branches with my initials (so I know it's my branch on multi-deve
 
 Let's complete the minimum viable python project. We need the actual python module, signaled by a (currently) blank `__init__.py` file. 
 ```
-    (GPT) $ mkdir gecrooks_python_template
-    (GPT) $ touch gecrooks_python_template/__init__.py
+    (GPT) $ mkdir example_python_project
+    (GPT) $ touch example_python_project/__init__.py
 ```
 
 Python standards for packaging and distribution seems to be in flux (again...). So following what I think the current standard is we need 3 files, `setup.py`, `pyproject.toml`, and `setup.cfg`. 
@@ -144,7 +145,7 @@ All of the rest of the metadata goes in `setup.cfg` (in INI format).
 # SPDX license short-form identifier, https://spdx.org/licenses/
 
 Metadata-Version: 2.2
-Name = gecrooks_python_template
+Name = example_python_project
 Summary = Minimal viable setup for an open source, github hosted, python package
 Long-Description = file:README.md
 Long-Description-Content-Type = text/markdown
@@ -220,7 +221,7 @@ There should be a
 My favored approach is use git tags as the source of truth (Option 7 in the above linked list). We're going to tag releases anyways, so if we also hard code the version number into the python code we'd violate the single source of truth principle. We use the [setuptools_scm](https://github.com/pypa/setuptools_scm) package to automatically construct a version number from the latest git tag during installation.
 
 The convention is that the version number of a python packages should be available as `packagename.__version__`. 
-So we add the following code to `gecrooks_python_template/config.py` to extract the version number metadata.
+So we add the following code to `example_python_project/config.py` to extract the version number metadata.
 ```
 try:
     # python >= 3.8
@@ -233,7 +234,7 @@ except ImportError:  # pragma: no cover
 __all__ = ["__version__", "about"]
 
 
-package_name = "gecrooks_python_template"
+package_name = "example_python_project"
 
 try:
     __version__ = importlib_metadata.version(package_name)  # type: ignore
@@ -243,7 +244,7 @@ except Exception:  # pragma: no cover
 
 
 ```
-and then in `gecrooks_python_template/__init__.py`, we import this version number.
+and then in `example_python_project/__init__.py`, we import this version number.
 ```
 from .config import __version__ as __version__                      # noqa: F401
 ```
@@ -256,7 +257,7 @@ The various pragmas in the code above ("pragma: no cover" and "type: ignore") ar
 One of my tricks is to add a function to print the versions of the core upstream dependencies. This can be extremely helpful when debugging configuration or system dependent bugs, particularly when running continuous integration tests.
 
 ```
-# Configuration (> python -m gecrooks_python_template.about)
+# Configuration (> python -m example_python_project.about)
 platform                 macOS-10.13.6-x86_64-i386-64bit
 gecrooks-python-template 0.0.1
 python                   3.8.3
@@ -272,8 +273,8 @@ setuptools_scm           4.1.2
 The `about()` function to print this information is placed in `config.py`. The file `about.py` contains the standard python command line interface (CLI), 
 ```
 if __name__ == '__main__':
-    import gecrooks_python_template
-    gecrooks_python_template.about()
+    import example_python_project
+    example_python_project.about()
 ```
 It's important that `about.py` isn't imported by any other code in the package, else we'll get multiple import warnings when we try to run the CLI. 
 
@@ -288,13 +289,13 @@ Currently, the two main options for python unit tests appear to be `unittest` fr
 
 There's two common ways to organize tests. Either we place tests in a separate directory, or they live in the main package along with the rest of the code. In the past I've used the former approach. It keeps the test organized and separate from the production code. But I'm going to try the second approach for this project. The advantage is that the unit tests for a piece of code live right next to the code being tested.
 
-Let's test that we can access the version number (There is no piece of code too trivial that it shouldn't have a unit test.) In `gecrooks_python_template/config_test.py` we add
+Let's test that we can access the version number (There is no piece of code too trivial that it shouldn't have a unit test.) In `example_python_project/config_test.py` we add
 
 ```
-import gecrooks_python_template
+import example_python_project
 
 def test_version():
-    assert gecrooks_python_template.__version__
+    assert example_python_project.__version__
 ```
 and run our test. (The 'python -m' prefix isn't strictly necessary, but it helps ensure that pytest is running under the correct copy of python.)
 ```
@@ -302,10 +303,10 @@ and run our test. (The 'python -m' prefix isn't strictly necessary, but it helps
 (GTP) $ python -m pytest
 ========================================================================================== test session starts ===========================================================================================
 platform darwin -- Python 3.8.3, pytest-5.4.3, py-1.8.2, pluggy-0.13.1
-rootdir: /Users/work/Work/Projects/gecrooks_python_template
+rootdir: /Users/work/Work/Projects/example_python_project
 collected 1 item                                                                                                                                                                                         
 
-gecrooks_python_template/config_test.py .                                                                                                                                                                            [100%]
+example_python_project/config_test.py .                                                                                                                                                                            [100%]
 
 =========================================================================================== 1 passed in 0.02s ============================================================================================
 ```
@@ -316,7 +317,7 @@ from . import __version__
 ```
 But in the test code we use absolute imports. 
 ```
-from gecrooks_python_template import __version__
+from example_python_project import __version__
 ```
 In tests we want to access our code in the same way we would access it from the outside as an end user.
 
@@ -330,7 +331,7 @@ So we want to monitor the test coverage. The [pytest-cov](https://pypi.org/proje
 # pytest configuration
 [tool:pytest]
 testpaths =
-    gecrooks_python_template
+    example_python_project
 
 
 # Configuration for test coverage
@@ -341,7 +342,7 @@ testpaths =
 
 [coverage:paths]
 source =
-    gecrooks_python_template
+    example_python_project
 
 [coverage:run]
 omit =
@@ -401,12 +402,12 @@ It's common practice to add a copyright and license notice to the top of every s
 
 ```
 
-I tend to forget to add these lines. So let's add a unit test `gecrooks_python_template/config_test.py::test_copyright` to make sure we don't.
+I tend to forget to add these lines. So let's add a unit test `example_python_project/config_test.py::test_copyright` to make sure we don't.
 ```
 def test_copyright():
     """Check that source code files contain a copyright line"""
-    exclude = set(['gecrooks_python_template/version.py'])
-    for fname in glob.glob('gecrooks_python_template/**/*.py', recursive=True):
+    exclude = set(['example_python_project/version.py'])
+    for fname in glob.glob('example_python_project/**/*.py', recursive=True):
         if fname in exclude:
             continue
         print("Checking " + fname + " for copyright header")
@@ -579,10 +580,10 @@ Changes to be committed:
     new file:   docs/conf.py
     new file:   docs/index.rst
     new file:   pyproject.toml
-    new file:   gecrooks_python_template/__init__.py
-    new file:   gecrooks_python_template/about.py
-    new file:   gecrooks_python_template/config.py
-    new file:   gecrooks_python_template/config_test.py
+    new file:   example_python_project/__init__.py
+    new file:   example_python_project/about.py
+    new file:   example_python_project/config.py
+    new file:   example_python_project/config_test.py
     new file:   setup.cfg
     new file:   setup.py
     
@@ -621,7 +622,7 @@ Let's make sure it worked by installing from pypi into a fresh conda environment
 $ conda create --name tmp
 $ conda activate tmp
 (tmp) $ pip install --index-url https://test.pypi.org/simple/ --no-deps gecrooks-python-template
-(tmp) $ python -m gecrooks_python_template.about
+(tmp) $ python -m example_python_project.about
 (tmp) $ conda activate GTP
 ```
 
@@ -694,13 +695,13 @@ just a few moments.
   
 Answer the questions, create a new empty repo on github with the same name, push, and you should be good to go.
 
-    cd my_python_project
-    git remote add origin https://github.com/somebody/my_python_project.git
+    cd example_python_project
+    git remote add origin https://github.com/somebody/example_python_project.git
     git push -u origin master
 
 
 The basic idea is to replace customizable text with  template strings, e.g. `{{cookiecutter.author_email}}`. 
-Defaults for these templates are stored in `cookiecutter.json`. In particular the whole package is moved to a directory called 
+Defaults for these templates are stored in `cookiecutter.json`. In particular example_python_package is moved to a directory called 
 `{{cookiecutter.module_name}}`, and the module code is moved to 
 `{{cookiecutter.module_name}}/{{cookiecutter.module_name}}`. 
 I'm more or less following [cookiecutter-pypackage])https://github.com/audreyfeldroy/cookiecutter-pypackage)
