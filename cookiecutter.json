@@ -1,9 +1,11 @@
 {
-  "project_name": "My Python Project",
+  "project_name": "Example Python Project",
   "module_name": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
-  "short_description": "A short description of this project",
+  "short_description": "A short description of this example project",
   "author_name": "Some Body",
   "author_email": "somebody@example.com",
-  "copywrite": "2021, {{ cookiecutter.author_name }} and contributors",
-  "github_username": "somebody"
+  "copywrite": "{% now 'local', '%Y' %}, {{ cookiecutter.author_name }} and contributors",
+  "license": ["Apache-2.0", "MIT"],
+  "github_username": "somebody",
+  "initilize_git_repo": "y"
 }
