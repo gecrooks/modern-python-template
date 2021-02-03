@@ -10,7 +10,7 @@ help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
 
-test:
+test: ## Build example cookicutter project and test
 	rm -rf example_python_project/.git  # Remove old git test repo if previously initilized	
 	cookiecutter  --no-input --overwrite-if-exists .
 	cd example_python_project; make all

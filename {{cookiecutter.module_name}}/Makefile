@@ -86,9 +86,11 @@ build: ## Setuptools build
 	./setup.py clean --all
 	./setup.py sdist bdist_wheel
 
-
 clean: ## Clean up after setuptools
 	./setup.py clean --all
+
+requirements: ## Make requirements.txt
+	pip freeze > requirements.txt
 
 
 .PHONY: help

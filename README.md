@@ -349,11 +349,12 @@ exclude_lines =
     except ImportError
     assert False
     raise NotImplementedError()
+    pass
 ```
 
 We have to explicitly omit the unit tests since we have placed the test files in the same directories as the code to test.
 
-The [pragma](https://en.wikipedia.org/wiki/Directive_(programming)) `pragma: no cover` is used to mark untestable lines. This often happens with conditional imports used for backwards compatibility between python versions. The other excluded lines are common patterns of code that doesn't need test coverage.
+The [pragma](https://en.wikipedia.org/wiki/Directive_(programming)) `pragma: no cover` is used to mark untestable lines. This often happens with conditional imports used for backwards compatibility between python versions. The other excluded lines are common patterns of code that don't need test coverage.
 
 
 ## Linting
@@ -377,7 +378,7 @@ The configuration also lives in `setup.cfg`.
 max-line-length = 88
 ignore = E203, W503
 ```
-We need to override the linter on occasion. We add pragma such as `# noqa: F401` to assert that no, really, in this case we do know what we're doing.
+We need to override the linter on occasion. We add pragmas such as `# noqa: F401` to assert that no, really, in this case we do know what we're doing.
 
 
 Two other python code format tools to consider using are [isort](https://pypi.org/project/isort/) and [black, The uncompromising code formatter](https://black.readthedocs.io/en/stable/). Isort sorts your import statements into a canonical order. And Black is the Model-T Ford of code formatting -- any format you want, so long as it's Black. I could quibble about some of Black's code style, but in the end it's just easier to blacken your code and accept black's choices, and thereby gain a consistent coding style across developers. 
@@ -698,7 +699,7 @@ The basic idea is to replace customizable text with  template strings, e.g. `{{c
 Defaults for these templates are stored in `cookiecutter.json`. In particular example_python_package is moved to a directory called 
 `{{cookiecutter.module_name}}`, and the module code is moved to 
 `{{cookiecutter.module_name}}/{{cookiecutter.module_name}}`. 
-I'm more or less following [cookiecutter-pypackage])https://github.com/audreyfeldroy/cookiecutter-pypackage)
+I'm more or less following [cookiecutter-pypackage](https://github.com/audreyfeldroy/cookiecutter-pypackage)
 
 One tricky bit is that some of the github configuration files already contain similar template strings. So we have to
 wrap those strings in special raw tags.
