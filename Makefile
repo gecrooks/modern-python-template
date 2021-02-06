@@ -17,6 +17,8 @@ test: ## Build example cookicutter project and test
 	cd example_python_project; make clean
 	rm -rf example_python_project/.git  # Not needed 	
 
+status:  ## git status --short --branch
+	@git status --short --branch
 
 .PHONY: help
 .PHONY: test	

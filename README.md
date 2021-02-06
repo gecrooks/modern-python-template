@@ -474,7 +474,7 @@ build        Setuptools build
 clean        Clean up after setuptools
 ```
 
-The pragmas target searches the code and lists all of the pragmas that occur. Common uses of [pragmas](https://en.wikipedia.org/wiki/Directive_(programming)) are to override the linter, tester, or typechecker. I also tend to scatter other keywords throughout my code: TODO (For things that need doing), FIXME (For code that's broken, but I can't fix right this moment), DOCME (code that needs more documentation), and TESTME (for code that needs more tests). In principle, production code shouldn't have these pragmas. Either the problem should be fixed, or if it can't be immediately fixed, it should become a github issue. 
+The pragmas target searches the code and lists all of the pragmas that occur. Common uses of [pragmas](https://en.wikipedia.org/wiki/Directive_(programming)) are to override the linter, tester, or typechecker. 
 
 
 ## Readthedocs
