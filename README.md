@@ -320,7 +320,7 @@ In tests we want to access our code in the same way we would access it from the 
 
 At a bare minimum the unit tests should run (almost) every line of code. If a line of code never runs, then how do you know it works at all?
 
-So we want to monitor the test coverage. The [pytest-cov](https://pypi.org/project/pytest-cov/) plugin to pytest will do this for us. Configuration is placed in the setup.cfg file (Config can also be placed in a separate `.coveragerc`, but I think its better to avoid a proliferation of configuration files.)
+So we want to monitor the test coverage. The [pytest-cov](https://pypi.org/project/pytest-cov/) plugin to pytest will do this for us. Configuration is placed in the setup.cfg file (Config can also be placed in a separate `.coveragerc`, but I think it's better to avoid a proliferation of configuration files.)
 ```
 # pytest configuration
 [tool:pytest]
@@ -555,7 +555,7 @@ jobs:
 ```
 Note that these tests are picky. Not only must the unit tests pass, but test coverage must be 100%, the code must be delinted, blackened, isorted, and properly typed, and the docs have to build without error.
 
-It's a good idea to set a cron job to run the test suite against the main branch on a regular basis (the `schedule` block above). This will alert you of problems caused by your dependencies updating. (For instance, one of my other projects just broke, apparently because flake8 updated it's rules.)
+It's a good idea to set a cron job to run the test suite against the main branch on a regular basis (the `schedule` block above). This will alert you of problems caused by your dependencies updating. (For instance, one of my other projects just broke, apparently because flake8 updated its rules.)
 
 Let's add, commit, and push our changes. 
 ```
