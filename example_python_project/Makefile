@@ -46,25 +46,6 @@ docs-clean: 	## Clean documentation build
 	(cd docs; make clean)
 
 pragmas:	## Report all pragmas in code
-	@echo
-	@echo "** Code that needs something done **"
-	@grep 'TODO' --color -r -n $(FILES) || echo "No TODO pragmas"
-	@echo
-	@echo "** Code that needs fixing **"
-	@grep 'FIXME' --color -r -n $(FILES) || echo "No FIXME pragmas"
-	@echo
-	@echo "** Code that needs documenting **"
-	@grep 'DOCME' --color -r -n $(FILES) || echo "No DOCME pragmas"
-	@echo
-	@echo "** Code that needs more tests **"
-	@grep 'TESTME' --color -r -n $(FILES) || echo "No TESTME pragmas"
-	@echo
-	@echo "** Implementation notes **"
-	@grep 'NB:' --color -r -n $(FILES)  || echo "No NB implementation notes Pragmas"
-	@echo	
-	@echo "** Acknowledgments **"
-	@grep 'kudos:' --color -r -n -i $(FILES) || echo "No kudos"
-	@echo
 	@echo "** Pragma for test coverage **"
 	@grep 'pragma: no cover' --color -r -n $(FILES) || echo "No Typecheck Pragmas"
 	@echo
@@ -78,9 +59,8 @@ pragmas:	## Report all pragmas in code
 about:	## Report versions of dependent packages
 	@python -m $(NAME).about
 
-status:  ## git status -uno
-	@echo
-	@git status -uno
+status:  ## git status --short --branch
+	@git status --short --branch
 
 build: ## Setuptools build
 	./setup.py clean --all
