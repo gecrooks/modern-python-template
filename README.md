@@ -420,8 +420,8 @@ def test_copyright():
 [Sphinx](https://www.sphinx-doc.org/en/master/usage/quickstart.html) is the standard 
 tool used to generate API documentation from the python source. Use the handy quick start tools. 
 ```
-$ mkdir docs
-$ cd docs
+$ mkdir docsrc
+$ cd docsrc
 $ sphinx-quickstart
 ```
 The defaults are reasonable. Enter the project name and author when prompted. 
@@ -451,6 +451,7 @@ $ git add Makefile *.*
 # cd ..
 ```
 
+Note that we have placed the sphinx documentation tools in `docsrc` rather than the more traditional `docs`. This is to keep the `docs` directory available for use to serve documentation using `githubs-pages`. (We also have to update the root `.gitignore` file.)
 
 
 ## Makefile

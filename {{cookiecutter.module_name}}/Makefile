@@ -5,45 +5,45 @@
 .DEFAULT_GOAL := help
 
 NAME = {{cookiecutter.module_name}}
-FILES = $(NAME) docs/conf.py setup.py
+FILES = $(NAME) docsrc/conf.py setup.py
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
 all: about coverage lint typecheck docs build   ## Run all tests
 
-test:		## Run unittests
+test:  ## Run unittests
 	pytest --disable-pytest-warnings
 
-coverage:	## Report test coverage
+coverage:  ## Report test coverage
 	@echo
 	pytest --disable-pytest-warnings --cov
 	@echo
 
-lint:		## Lint check python source
+lint:  ## Lint check python source
 	@isort --check $(NAME)  ||  echo "isort:   FAILED!"
 	@black --check --quiet $(NAME)    || echo "black:   FAILED!"
 	@flake8 $(FILES)
 
-delint:   ## Run isort and black to delint project
+delint:  ## Run isort and black to delint project
 	@echo	
 	isort $(NAME)
 	@echo
 	black $(NAME)
 	@echo
 
-typecheck:	## Static typechecking 
+typecheck:  ## Static typechecking 
 	mypy $(NAME)
 
-docs:		## Build documentation
-	(cd docs; make html)
+docs:  ## Build documentation
+	(cd docsrc; make html)
 
 docs-open:  ## Build documentation and open in webbrowser
-	(cd docs; make html)
-	open docs/_build/html/index.html
+	(cd docsrc; make html)
+	open docsrc/_build/html/index.html
 
-docs-clean: 	## Clean documentation build
-	(cd docs; make clean)
+docs-clean:  ## Clean documentation build
+	(cd docsrc; make clean)
 
 pragmas:	## Report all pragmas in code
 	@echo "** Pragma for test coverage **"
@@ -63,8 +63,8 @@ status:  ## git status --short --branch
 	@git status --short --branch
 
 build: ## Setuptools build
-	./setup.py clean --all
-	./setup.py sdist bdist_wheel
+	./setup.py --quiet clean --all
+	./setup.py --quiet sdist bdist_wheel
 
 clean: ## Clean up after setuptools
 	./setup.py clean --all
