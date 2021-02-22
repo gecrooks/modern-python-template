@@ -59,4 +59,4 @@ jobs:
     - name: Build documentation with sphinx
       run: |
         cd example_python_project
-        sphinx-build -M html docs docs/_build
+        sphinx-build -M html docsrc docsrc/_build

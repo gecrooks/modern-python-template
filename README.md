@@ -551,7 +551,7 @@ jobs:
         mypy
     - name: Build documentation with sphinx
       run: |
-        sphinx-build -M html docs docs/_build
+        sphinx-build -M html docsrc docsrc/_build
 
 ```
 Note that these tests are picky. Not only must the unit tests pass, but test coverage must be 100%, the code must be delinted, blackened, isorted, and properly typed, and the docs have to build without error.
