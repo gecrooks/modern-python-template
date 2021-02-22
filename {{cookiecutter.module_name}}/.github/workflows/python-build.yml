@@ -47,4 +47,4 @@ jobs:
         mypy
     - name: Build documentation with sphinx
       run: |
-        sphinx-build -M html docs docs/_build
+        (cd docsrc; make html)
