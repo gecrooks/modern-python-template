@@ -10,6 +10,11 @@ FILES = $(NAME) docsrc/conf.py setup.py
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
+install:  ## Install package ready for development
+	python -m pip install --upgrade pip
+	if [ -f requirements.txt ]; then pip install -r requirements.txt; fi         
+	python -m pip install -e .[dev]
+
 all: about coverage lint typecheck docs build   ## Run all tests
 
 test:  ## Run unittests
@@ -44,6 +49,12 @@ docs-open:  ## Build documentation and open in webbrowser
 
 docs-clean:  ## Clean documentation build
 	(cd docsrc; make clean)
+
+docs-github-pages: docs ## Install html in docs directory ready for github pages
+	# https://www.docslikecode.com/articles/github-pages-python-sphinx/
+	@mkdir -p docs
+	@touch docs/.nojekyll  # Tell github raw html, not jekyll
+	@cp -a _build/html/. ../docs
 
 pragmas:	## Report all pragmas in code
 	@echo "** Pragma for test coverage **"

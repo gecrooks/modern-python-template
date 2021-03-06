@@ -140,24 +140,24 @@ All of the rest of the metadata goes in `setup.cfg` (in INI format).
 # [INI](https://docs.python.org/3/install/index.html#inst-config-syntax) file format.
 
 [metadata]
+# https://setuptools.readthedocs.io/en/latest/userguide/declarative_config.html
 # https://packaging.python.org/specifications/core-metadata/
 # https://www.python.org/dev/peps/pep-0639/
 # SPDX license short-form identifier, https://spdx.org/licenses/
-
-Metadata-Version: 2.2
-Name = example_python_project
-Summary = Minimal viable setup for an open source, github hosted, python package
-Long-Description = file:README.md
-Long-Description-Content-Type = text/markdown
-Keywords = python,template
-Home-page = https://github.com/gecrooks/gecrooks-python-template/
-Author = Gavin E. Crooks
-Author-email = gec@threeplusone.com
-License = Apache-2.0
-License-File = LICENSE
-
 # https://pypi.org/classifiers/
-Classifiers=
+# setuptools v53.1.0 no longer recognizes capitalized keys, e.g. "Name" must be "name".
+
+name = {{cookiecutter.module_name}}
+summary = {{cookiecutter.short_description}}
+long_description = file:README.md
+long_description_content_type = text/markdown
+keywords = python
+url = https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.module_name}}/
+author = {{cookiecutter.author_name}}
+author_email = {{cookiecutter.author_email}}
+license = {{cookiecutter.license}}
+license_file = LICENSE
+classifiers=
     Development Status :: 4 - Beta
     Intended Audience :: Developers
     Intended Audience :: Science/Research
@@ -172,6 +172,7 @@ Classifiers=
     Topic :: Software Development :: Libraries
     Topic :: Software Development :: Libraries :: Python Modules
     Typing :: Typed
+
 
 [options]
 zip_safe = True
@@ -196,7 +197,6 @@ dev =
     sphinx
     sphinxcontrib-bibtex
     setuptools_scm
-
 
 ```
 
@@ -678,6 +678,16 @@ $ git push
 ## Tag and release
 
 Assuming everything went well, you can now upload a release to pypi proper. We can add a [github workflow](.github/workflows/python-publish.yml) to automatically upload new releases tagged on github. The only additional configuration is to upload `PYPI_USERNAME` and `PYPI_PASSWORD` to github as secrets (under you repo settings). 
+
+## Extras: requirements.txt
+The `setup.cfg` file specifies the minimum versions of dependencies.  But for testing and deployment it can be useful to pin the exact 
+versions.
+
+    > pip freeze > requirements.txt
+
+And to install these exact versions:
+    
+    > pip install -r requirements.txt
 
 
 ## Cookiecutter
