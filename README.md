@@ -136,28 +136,35 @@ Again, the parts with `setuptools_scm` are additions.
 All of the rest of the metadata goes in `setup.cfg` (in INI format).
 ```
 # Setup Configuration File
+# setup.cfg is the configuration file for setuptools. It tells setuptools about your package
+# (such as the name and version) as well as which code files to include. Eventually much of
+# this configuration may be able to move to pyproject.toml.
+#
+# https://packaging.python.org/tutorials/packaging-projects/
 # https://docs.python.org/3/distutils/configfile.html
 # [INI](https://docs.python.org/3/install/index.html#inst-config-syntax) file format.
+#
+# Project cut from gecrooks_python_template cookiecutter template
+# https://github.com/gecrooks/gecrooks-python-template
+
 
 [metadata]
-# https://packaging.python.org/specifications/core-metadata/
-# https://www.python.org/dev/peps/pep-0639/
+# https://setuptools.readthedocs.io/en/latest/userguide/declarative_config.html
 # SPDX license short-form identifier, https://spdx.org/licenses/
-
-Metadata-Version: 2.2
-Name = example_python_project
-Summary = Minimal viable setup for an open source, github hosted, python package
-Long-Description = file:README.md
-Long-Description-Content-Type = text/markdown
-Keywords = python,template
-Home-page = https://github.com/gecrooks/gecrooks-python-template/
-Author = Gavin E. Crooks
-Author-email = gec@threeplusone.com
-License = Apache-2.0
-License-File = LICENSE
-
 # https://pypi.org/classifiers/
-Classifiers=
+# setuptools v53.1.0+ expects lower cased keys, e.g. "Name" must be "name".
+
+name = {{cookiecutter.module_name}}
+summary = {{cookiecutter.short_description}}
+long_description = file:README.md
+long_description_content_type = text/markdown
+keywords = python
+url = https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.module_name}}/
+author = {{cookiecutter.author_name}}
+author_email = {{cookiecutter.author_email}}
+license = {{cookiecutter.license}}
+license_file = LICENSE
+classifiers=
     Development Status :: 4 - Beta
     Intended Audience :: Developers
     Intended Audience :: Science/Research
@@ -173,13 +180,14 @@ Classifiers=
     Topic :: Software Development :: Libraries :: Python Modules
     Typing :: Typed
 
+
 [options]
 zip_safe = True
 python_requires = >= 3.8
 packages = find:
 
 install_requires =
-    numpy                # example
+    numpy >= 1.20    # v1.20 introduces typechecking for numpy
 
 setup_requires =
   setuptools_scm
@@ -187,6 +195,7 @@ setup_requires =
 
 [options.extras_require]
 dev =
+    setuptools_scm
     pytest >= 4.6
     pytest-cov
     flake8
@@ -194,11 +203,14 @@ dev =
     black
     isort
     sphinx
-    sphinxcontrib-bibtex
-    setuptools_scm
-
-
 ```
+Confusingly there are two different standards for metadata. At present the metadata
+lives in `setup.cfg` and should follow the setuptools 
+[specification](https://setuptools.readthedocs.io/en/latest/userguide/declarative_config.html). 
+But the intention seems to be
+that in the long run the metadata moves to `pyproject.toml` and follows a different 
+[specification](https://packaging.python.org/specifications/core-metadata/).
+
 
 It's good practice to support at least two consecutive versions of python. Starting with 3.9, python is moving to an annual [release schedule](https://www.python.org/dev/peps/pep-0602/). The initial 3.x.0 release will be in early October and the first bug patch 3.x.1 in early December, second in February, and so on.  Since it takes many important packages some time to upgrade (e.g. numpy and tensorflow are often bottlenecks), one should probably plan to upgrade python support around the beginning of each year. Upgrading involves changing the python version numbers in the tests and `config.cfg`, and then cleaning up any `__future__` or conditional imports, or other hacks added to maintain compatibility with older python releases. If you protected the master branch on github, and added required status checks, you'll need to update those too.
 
@@ -678,6 +690,22 @@ $ git push
 ## Tag and release
 
 Assuming everything went well, you can now upload a release to pypi proper. We can add a [github workflow](.github/workflows/python-publish.yml) to automatically upload new releases tagged on github. The only additional configuration is to upload `PYPI_USERNAME` and `PYPI_PASSWORD` to github as secrets (under you repo settings). 
+
+## Extras: requirements.txt
+The `setup.cfg` file specifies the minimum versions of dependencies.  But for testing and deployment it can be useful to pin the exact 
+versions.
+
+    > pip freeze > requirements.txt
+
+And to install these exact versions:
+    
+    > pip install -r requirements.txt
+
+## Extras: MANIFEST.in
+You don't need an [`MANIFEST.in` file](https://www.remarkablyrestrained.com/python-setuptools-manifest-in/).
+
+Historically, this file was used to specify which additional files, (typically data files) should be included in a packaged distribution. 
+But `setuptools_scm` takes care of that for us (in most cases), by default including all files under source control.
 
 
 ## Cookiecutter
