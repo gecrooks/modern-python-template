@@ -8,6 +8,7 @@
 #
 # NB: This module should not be imported by any other code in the package
 # (else we will get multiple import warnings)
+# Implementation is located in about_.py
 
 if __name__ == "__main__":
     import {{cookiecutter.module_name}}

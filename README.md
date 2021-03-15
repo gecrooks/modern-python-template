@@ -237,7 +237,7 @@ So we add the following code to `example_python_project/config.py` to extract th
 from importlib import metadata as importlib_metadata 
 
 
-__all__ = ["__version__", "about"]
+__all__ = ["__version__"]
 
 
 package_name = "example_python_project"
@@ -276,7 +276,7 @@ sphinx                   3.1.1
 sphinxcontrib-bibtex     1.0.0
 setuptools_scm           4.1.2
 ```
-The `about()` function to print this information is placed in `config.py`. The file `about.py` contains the standard python command line interface (CLI), 
+The `about()` function to print this information is placed in `about_.py`. The file `about.py` contains the standard python command line interface (CLI), 
 ```
 if __name__ == '__main__':
     import example_python_project
@@ -284,6 +284,7 @@ if __name__ == '__main__':
 ```
 It's important that `about.py` isn't imported by any other code in the package, else we'll get multiple import warnings when we try to run the CLI. 
 
+If you don't want the `about` functionality remove the files `about.py`, `about_`.py, and `about_test`.py, remove the import in `__init__.py`, and edit the Makefile.
 
 ## Unit tests
 
@@ -590,6 +591,8 @@ Changes to be committed:
     new file:   pyproject.toml
     new file:   example_python_project/__init__.py
     new file:   example_python_project/about.py
+    new file:   example_python_project/about_.py
+    new file:   example_python_project/about_test.py        
     new file:   example_python_project/config.py
     new file:   example_python_project/config_test.py
     new file:   setup.cfg

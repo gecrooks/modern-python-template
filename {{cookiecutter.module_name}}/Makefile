@@ -22,7 +22,7 @@ test:  ## Run unittests
 
 coverage:  ## Report test coverage
 	@echo
-	pytest --disable-pytest-warnings --cov
+	pytest --disable-pytest-warnings --cov $(NAME)
 	@echo
 
 lint:  ## Lint check python source

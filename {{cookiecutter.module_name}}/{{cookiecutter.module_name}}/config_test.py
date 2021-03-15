@@ -4,25 +4,12 @@
 # found in the LICENSE file in the root directory of this source tree.
 
 import glob
-import io
-import subprocess
 
 import {{cookiecutter.module_name}}
 
 
 def test_version() -> None:
     assert {{cookiecutter.module_name}}.__version__
-
-
-def test_about() -> None:
-    out = io.StringIO()
-    {{cookiecutter.module_name}}.about(out)
-    print(out)
-
-
-def test_about_main() -> None:
-    rval = subprocess.call(["python", "-m", "{{cookiecutter.module_name}}.about"])
-    assert rval == 0
 
 
 def test_copyright() -> None:
