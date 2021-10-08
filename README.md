@@ -174,6 +174,7 @@ classifiers=
     Programming Language :: Python :: 3
     Programming Language :: Python :: 3.8
     Programming Language :: Python :: 3.9
+    Programming Language :: Python :: 3.10    
     Topic :: Scientific/Engineering
     Topic :: Software Development
     Topic :: Software Development :: Libraries
@@ -187,7 +188,7 @@ python_requires = >= 3.8
 packages = find:
 
 install_requires =
-    numpy >= 1.20    # v1.20 introduces typechecking for numpy
+    numpy
 
 setup_requires =
   setuptools_scm
@@ -195,6 +196,7 @@ setup_requires =
 
 [options.extras_require]
 dev =
+    numpy >= 1.20               # v1.20 introduces typechecking for numpy
     setuptools_scm
     pytest >= 4.6
     pytest-cov
