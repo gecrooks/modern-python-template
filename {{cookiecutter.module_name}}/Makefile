@@ -57,15 +57,15 @@ docs-github-pages: docs ## Install html in docs directory ready for github pages
 	@cp -a _build/html/. ../docs
 
 pragmas:	## Report all pragmas in code
-	@echo "** Pragma for test coverage **"
-	@grep 'pragma: no cover' --color -r -n $(FILES) || echo "No Typecheck Pragmas"
+	@echo "** Test coverage pragmas**"
+	@grep 'pragma: no cover' --color -r -n $(FILES) || echo "No test coverage pragmas"
 	@echo
-	@echo "** flake8 linting pragmas **"
+	@echo "** Linting pragmas **"
 	@echo "(http://flake8.pycqa.org/en/latest/user/error-codes.html)"
-	@grep '# noqa:' --color -r -n $(FILES) || echo "No flake8 pragmas"
+	@grep '# noqa:' --color -r -n $(FILES) || echo "No linting pragmas"
 	@echo
 	@echo "** Typecheck pragmas **"
-	@grep '# type:' --color -r -n $(FILES) || echo "No Typecheck Pragmas"
+	@grep '# type:' --color -r -n $(FILES) || echo "No typecheck pragmas"
 
 about:	## Report versions of dependent packages
 	@python -m $(NAME).about
