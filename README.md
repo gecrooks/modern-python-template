@@ -709,7 +709,7 @@ $ git push
 
 ## Tag and release
 
-Assuming everything went well, you can now upload a release to pypi proper. We can add a [github workflow](.github/workflows/python-publish.yml) to automatically upload new releases tagged on github. The only additional configuration is to upload `PYPI_USERNAME` and `PYPI_PASSWORD` to github as secrets (under yout repo settings). 
+Assuming everything went well, you can now upload a release to pypi proper. We can add a [github workflow](.github/workflows/python-publish.yml) to automatically upload new releases tagged on github. The only additional configuration is to upload `PYPI_USERNAME` and `PYPI_PASSWORD` to github as secrets (under your repo settings). 
 
 ## Extras: requirements.txt
 The `setup.cfg` file specifies the minimum versions of dependencies.  But for testing and deployment it can be useful to pin the exact 
