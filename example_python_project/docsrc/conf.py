@@ -17,9 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "gecrooks-python-template"
-copyright = "2020, Gavin Crooks"
-author = "Gavin Crooks"
+project = "example_python_project"
+copyright = "2021, Some Body and contributors"
+author = "Some Body"
 
 
 # -- General configuration ---------------------------------------------------

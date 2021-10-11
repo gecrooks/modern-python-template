@@ -4,6 +4,8 @@
 # found in the LICENSE file in the root directory of this source tree.
 
 import glob
+import io
+import subprocess
 
 import {{cookiecutter.module_name}}
 
@@ -23,3 +25,14 @@ def test_copyright() -> None:
                     continue
                 assert line.startswith("# Copyright")
                 break
+
+
+def test_about() -> None:
+    out = io.StringIO()
+    {{cookiecutter.module_name}}.about(out)
+    print(out)
+
+
+def test_about_main() -> None:
+    rval = subprocess.call(["python", "-m", "{{cookiecutter.module_name}}.about"])
+    assert rval == 0

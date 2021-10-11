@@ -17,9 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "gecrooks-python-template"
-copyright = "2020, Gavin Crooks"
-author = "Gavin Crooks"
+project = "{{cookiecutter.module_name}}"
+copyright = "{{cookiecutter.copywrite}}"
+author = "{{cookiecutter.author_name}}"
 
 
 # -- General configuration ---------------------------------------------------

@@ -1,4 +1,4 @@
-# gecrooks-python-template: Minimal viable setup for an open source, github hosted, python package
+# gecrooks-python-template: How to setup an open source, github hosted, python package
 
 
 ![Build Status](https://github.com/gecrooks/gecrooks-python-template/workflows/Build/badge.svg) 
@@ -32,7 +32,7 @@ The minimal project we're building is located in the [example_python_project](ex
 
 The first decision to make is the name of the project. And for python packages the most important criteria is that the name isn't already taken on [pypi](https://pypi.org/), the repository from which we install python packages with `pip`. So we should do a quick Internet search: This name is available on pypi, there are no other repos of that name on github, and a google search doesn't pull up anything relevant. So we're good to go. 
 
-Note that github repo and pypi packages are generally named using dashes (`-`), but that the corresponding python module are named with underscores (`_`). (The reason for this dichotomy appears to be that underscores don't work well in URLs, but dashes are frowned upon in filenames.)
+Note that github repo and pypi packages are generally named using dashes (`-`), but that the corresponding python modules are named with underscores (`_`). (The reason for this dichotomy appears to be that underscores don't work well in URLs, but dashes are frowned upon in filenames.)
 
 ## License
 
@@ -102,7 +102,7 @@ Let's complete the minimum viable python project. We need the actual python modu
     (GPT) $ touch example_python_project/__init__.py
 ```
 
-Python standards for packaging and distribution seems to be in flux (again...). So following what I think the current standard is we need 3 files, `setup.py`, `pyproject.toml`, and `setup.cfg`. 
+Python standards for packaging and distribution seems to be in flux (again...). So, following what I think the current standard is, we need 3 files, `setup.py`, `pyproject.toml`, and `setup.cfg`. 
 
 The modern `setup.py` is just a husk:
 
@@ -172,6 +172,7 @@ classifiers=
     Natural Language :: English
     Operating System :: OS Independent    
     Programming Language :: Python :: 3
+    Programming Language :: Python :: 3.7    
     Programming Language :: Python :: 3.8
     Programming Language :: Python :: 3.9
     Programming Language :: Python :: 3.10    
@@ -184,10 +185,11 @@ classifiers=
 
 [options]
 zip_safe = True
-python_requires = >= 3.8
+python_requires = >= 3.7
 packages = find:
 
 install_requires =
+    importlib_metadata      ; python_version < "3.8"   # PEP508 environment marker
     numpy
 
 setup_requires =
@@ -214,7 +216,9 @@ that in the long run the metadata moves to `pyproject.toml` and follows a differ
 [specification](https://packaging.python.org/specifications/core-metadata/).
 
 
-It's good practice to support at least two consecutive versions of python. Starting with 3.9, python is moving to an annual [release schedule](https://www.python.org/dev/peps/pep-0602/). The initial 3.x.0 release will be in early October and the first bug patch 3.x.1 in early December, second in February, and so on.  Since it takes many important packages some time to upgrade (e.g. numpy and tensorflow are often bottlenecks), one should probably plan to upgrade python support around the beginning of each year. Upgrading involves changing the python version numbers in the tests and `config.cfg`, and then cleaning up any `__future__` or conditional imports, or other hacks added to maintain compatibility with older python releases. If you protected the master branch on github, and added required status checks, you'll need to update those too.
+It's good practice to support at least two consecutive versions of python. Starting with 3.9, python is moving to an annual [release schedule](https://www.python.org/dev/peps/pep-0602/). The initial 3.x.0 release will be in early October and the first bug patch 3.x.1 in early December, second in February, and so on.  Since it takes many important packages some time to upgrade (e.g. numpy and tensorflow are often bottlenecks), one should probably plan to upgrade python support around the beginning of each year. Upgrading involves changing the python version numbers in the workflow tests and `config.cfg`, and then cleaning up any `__future__` or conditional imports, or other hacks added to maintain compatibility with older python releases. If you protected the master branch on github, and added required status checks, you'll need to update those too.
+
+Supporting older python versions is often a good idea, if you don't need the newest wizz-bang python features. We'll support python3.7 onwards for now (Since Google's colab currently defaults to 3.7 (Oct 2021)).
 
 
 We can now install our package (as editable -e, so that the code in our repo is live).
@@ -236,7 +240,7 @@ The convention is that the version number of a python packages should be availab
 So we add the following code to `example_python_project/config.py` to extract the version number metadata.
 ```
 
-from importlib import metadata as importlib_metadata 
+from .future import importlib_metadata 
 
 
 __all__ = ["__version__"]
@@ -259,6 +263,18 @@ from .config import __version__ as __version__                      # noqa: F401
 We put the code to extract the version number in `config.py` and not `__init__.py`, because we don't want to pollute our top level package namespace. 
 
 The various pragmas in the code above ("pragma: no cover" and "type: ignore") are there because the conditional imports confuse both our type checker and code coverage tools.
+
+The `.future` module conditionally imports the `importlib_metadata` package when `metadata` isn't available in python itself.
+```
+__all__ = ["importlib_metadata"]
+
+try:
+    # python >= 3.8
+    from importlib import metadata as importlib_metadata  # type: ignore
+except ImportError:  # pragma: no cover
+    import importlib_metadata  # type: ignore  # noqa: F401
+```
+
 
 ## about
 
@@ -286,7 +302,7 @@ if __name__ == '__main__':
 ```
 It's important that `about.py` isn't imported by any other code in the package, else we'll get multiple import warnings when we try to run the CLI. 
 
-If you don't want the `about` functionality remove the files `about.py`, `about_`.py, and `about_test`.py, remove the import in `__init__.py`, and edit the Makefile.
+If you don't want the `about` functionality remove the file `about.py`, `about()` function in config.py, and relevant tests in `config_test.py`, and edit the Makefile.
 
 ## Unit tests
 
@@ -333,7 +349,7 @@ In tests we want to access our code in the same way we would access it from the 
 
 ## Test coverage
 
-At a bare minimum the unit tests should run (almost) every line of code. If a line of code never runs, then how do you know it works at all?
+At a bare minimum the unit tests should run (almost) every line of code. If a line of code never runs, then how do you know it works at all? (High code coverage does not mean you have a [good test suite](https://preslav.me/2020/12/03/the-myth-of-code-coverage/). But a good set of unit tests will have high code coverage.)
 
 So we want to monitor the test coverage. The [pytest-cov](https://pypi.org/project/pytest-cov/) plugin to pytest will do this for us. Configuration is placed in the setup.cfg file (Config can also be placed in a separate `.coveragerc`, but I think it's better to avoid a proliferation of configuration files.)
 ```
@@ -374,7 +390,7 @@ The [pragma](https://en.wikipedia.org/wiki/Directive_(programming)) `pragma: no 
 
 ## Linting
 
-We need to lint our code before pushing any commits. I like [flake8](https://flake8.pycqa.org/en/latest/). It's faster than pylint, and I think better error messages. I will hereby declare:
+We need to lint our code before pushing any commits. I like [flake8](https://flake8.pycqa.org/en/latest/). It's faster than pylint, and (I think) better error messages. I will hereby declare:
 
     The depth of the indentation shall be 4 spaces. 
     And 4 spaces shall be the depth of the indentation. 
@@ -383,7 +399,7 @@ We need to lint our code before pushing any commits. I like [flake8](https://fla
 
 Four spaces is standard. [Tabs are evil](https://www.emacswiki.org/emacs/TabsAreEvil). I've worked on a project with 2-space indents, and I see the appeal, but I found it really weird. 
 
-Most of flake8's defaults are perfectly reasonable and in line with [PEP8](https://www.python.org/dev/peps/pep-0008/) guidance. But even [Linus](https://lkml.org/lkml/2020/5/29/1038) agrees that the old standard of 80 columns of text is too restrictive. (Allegedly, 2-space indents was [Google's](https://www.youtube.com/watch?v=wf-BqAjZb8M&feature=youtu.be&t=260) solution to the problem that 80 character lines are too short. Just make the indents smaller!) Raymond Hettinger suggests 90ish (without a hard cutoff), and [black](https://black.readthedocs.io/en/stable/the_black_code_style.html) uses 88. So let's try 88.
+Most of flake8's defaults are perfectly reasonable and in line with [PEP8](https://www.python.org/dev/peps/pep-0008/) guidance. But even [Linus](https://lkml.org/lkml/2020/5/29/1038) agrees that the old standard of 80 columns of text is too restrictive. (Allegedly, 2-space indents were [Google's](https://www.youtube.com/watch?v=wf-BqAjZb8M&feature=youtu.be&t=260) solution to the problem that 80 character lines are too short. Just make the indents smaller!) Raymond Hettinger suggests 90ish (without a hard cutoff), and [black](https://black.readthedocs.io/en/stable/the_black_code_style.html) uses 88. So let's try 88.
 
 
 The configuration also lives in `setup.cfg`.
@@ -398,7 +414,7 @@ We need to override the linter on occasion. We add pragmas such as `# noqa: F401
 
 Two other python code format tools to consider using are [isort](https://pypi.org/project/isort/) and [black, The uncompromising code formatter](https://black.readthedocs.io/en/stable/). Isort sorts your import statements into a canonical order. And Black is the Model-T Ford of code formatting -- any format you want, so long as it's Black. I could quibble about some of Black's code style, but in the end it's just easier to blacken your code and accept black's choices, and thereby gain a consistent coding style across developers. 
 
-The command `make delint` will run these `isort` and `black` on your code, with the right magic incantations so that they are compatible. (`isort --profile black` which appears to be equivalent to `isort -m 3 --tc --line-length 88`. We set this configuration project wide in `setup.cfg`)
+The command `make delint` will run `isort` and `black` on your code, with the right magic incantations so that they are compatible. (`isort --profile black` which appears to be equivalent to `isort -m 3 --tc --line-length 88`. We set this configuration project wide in `setup.cfg`)
 
 
 ## Copyright
@@ -466,7 +482,7 @@ $ git add Makefile *.*
 # cd ..
 ```
 
-Note that we have placed the sphinx documentation tools in `docsrc` rather than the more traditional `docs`. This is to keep the `docs` directory available for use to serve documentation using `githubs-pages`. (We also have to update the root `.gitignore` file.)
+Note that we have placed the sphinx documentation tools in `docsrc` rather than the more traditional `docs`. This is to keep the `docs` directory available to serve documentation using `githubs-pages`. (We also have to update the root `.gitignore` file.)
 
 
 ## Makefile
@@ -538,7 +554,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.8', '3.9']
+        python-version: ['3.7', '3.8', '3.9', '3.10']
 
     steps:
     - uses: actions/checkout@v2
@@ -592,11 +608,10 @@ Changes to be committed:
     new file:   docs/index.rst
     new file:   pyproject.toml
     new file:   example_python_project/__init__.py
-    new file:   example_python_project/about.py
-    new file:   example_python_project/about_.py
-    new file:   example_python_project/about_test.py        
+    new file:   example_python_project/about.py      
     new file:   example_python_project/config.py
     new file:   example_python_project/config_test.py
+    new file:   example_python_project/future.py    
     new file:   setup.cfg
     new file:   setup.py
     
@@ -694,7 +709,7 @@ $ git push
 
 ## Tag and release
 
-Assuming everything went well, you can now upload a release to pypi proper. We can add a [github workflow](.github/workflows/python-publish.yml) to automatically upload new releases tagged on github. The only additional configuration is to upload `PYPI_USERNAME` and `PYPI_PASSWORD` to github as secrets (under you repo settings). 
+Assuming everything went well, you can now upload a release to pypi proper. We can add a [github workflow](.github/workflows/python-publish.yml) to automatically upload new releases tagged on github. The only additional configuration is to upload `PYPI_USERNAME` and `PYPI_PASSWORD` to github as secrets (under your repo settings). 
 
 ## Extras: requirements.txt
 The `setup.cfg` file specifies the minimum versions of dependencies.  But for testing and deployment it can be useful to pin the exact 
@@ -707,7 +722,7 @@ And to install these exact versions:
     > pip install -r requirements.txt
 
 ## Extras: MANIFEST.in
-You don't need an [`MANIFEST.in` file](https://www.remarkablyrestrained.com/python-setuptools-manifest-in/).
+You don't need a [`MANIFEST.in` file](https://www.remarkablyrestrained.com/python-setuptools-manifest-in/).
 
 Historically, this file was used to specify which additional files, (typically data files) should be included in a packaged distribution. 
 But `setuptools_scm` takes care of that for us (in most cases), by default including all files under source control.
@@ -740,7 +755,7 @@ wrap those strings in special raw tags.
 
     {% raw %} some stuff with {templates} {% endraw %}
 
-I also added some pre- and post- templating hooks (in the `hooks` subdirectory). These initialize and tag a git repo in the  created module, and pip install the package.
+I also added some pre- and post- templating hooks (in the `hooks` subdirectory). These initialize and tag a git repo in the created module, and pip install the package.
 
 
 ## Conclusion
