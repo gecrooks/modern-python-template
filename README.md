@@ -473,7 +473,7 @@ Go ahead and give it a whirl. This won't do anything interesting yet, but it's a
 $ make html
 ```
 
-One problem is that sphinx creates three (initially) empty directories, `_build`, `_static`, and `_templates`. But we can't add empty directories to git, since git only tracks files. The workaround is to add an empty `.gitignore` file to each of the `_static` and `_templates` directories. (Sphinx will create the `_build` directory when it needs it.)
+One problem is that sphinx creates three (initially) empty directories, `_build`, `_static`, and `_templates`. But we can't add empty directories to git, since git only tracks files. The workaround is to add an empty `.gitignore` file to each of the `_static` and `_templates` directories. (An alternative convention is to add a `.gitkeep` file.) If we never want the files in these directories to be under source control, we can add a `*` to the `.gitignore` file.  Sphinx will create the `_build` directory when it's needed.
 
 ```
 $ touch _templates/.gitignore _build/.gitignore _static/.gitignore
@@ -481,6 +481,7 @@ $ git add -f _templates/.gitignore _build/.gitignore _static/.gitignore
 $ git add Makefile *.*
 # cd ..
 ```
+
 
 Note that we have placed the sphinx documentation tools in `docsrc` rather than the more traditional `docs`. This is to keep the `docs` directory available to serve documentation using `githubs-pages`. (We also have to update the root `.gitignore` file.)
 
