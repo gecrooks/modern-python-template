@@ -15,7 +15,7 @@ test: ## Build example cookicutter project and test
 	cookiecutter  --no-input --overwrite-if-exists .
 	cd example_python_project; make all
 	cd example_python_project; make clean
-	rm -rf example_python_project/.git  # Not needed 	
+	rm -rf example_python_project/.git  # Not needed
 
 status:  ## git status --short --branch
 	@git status --short --branch
