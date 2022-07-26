@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "example_python_project"
-copyright = "2021, Some Body and contributors"
+copyright = "2022, Some Body and contributors"
 author = "Some Body"
 
 
