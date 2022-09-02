@@ -12,7 +12,7 @@ help:
 
 test: ## Build example cookicutter project and test
 	rm -rf example_python_project/.git  # Remove old git test repo if previously initilized	
-	cookiecutter  --no-input --overwrite-if-exists .
+	python -m cookiecutter  --no-input --overwrite-if-exists .
 	cd example_python_project; make all
 	cd example_python_project; make clean
 	rm -rf example_python_project/.git  # Not needed

@@ -12,33 +12,33 @@ help:
 
 install:  ## Install package ready for development
 	python -m pip install --upgrade pip
-	if [ -f requirements.txt ]; then pip install -r requirements.txt; fi         
+	if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi         
 	python -m pip install -e .[dev]
 
 all: about coverage lint typecheck docs build   ## Run all tests
 
 test:  ## Run unittests
-	pytest --disable-pytest-warnings
+	python -m pytest --disable-pytest-warnings
 
 coverage:  ## Report test coverage
 	@echo
-	pytest --disable-pytest-warnings --cov $(NAME)
+	python -m pytest --disable-pytest-warnings --cov $(NAME)
 	@echo
 
 lint:  ## Lint check python source
-	@isort --check $(NAME)  ||  echo "isort:   FAILED!"
-	@black --check --quiet $(NAME)    || echo "black:   FAILED!"
-	@flake8 $(FILES)
+	@python -m isort --check $(NAME)  ||  echo "isort:   FAILED!"
+	@python -m black --check --quiet $(NAME)    || echo "black:   FAILED!"
+	@python -m flake8 $(FILES)
 
 delint:  ## Run isort and black to delint project
 	@echo	
-	isort $(NAME)
+	python -m isort $(NAME)
 	@echo
-	black $(NAME)
+	python -m black $(NAME)
 	@echo
 
 typecheck:  ## Static typechecking 
-	mypy $(NAME)
+	python -m mypy $(NAME)
 
 docs:  ## Build documentation
 	(cd docsrc; make html)
@@ -81,7 +81,7 @@ clean: ## Clean up after setuptools
 	./setup.py clean --all
 
 requirements: ## Make requirements.txt
-	pip freeze > requirements.txt
+	python -m pip freeze > requirements.txt
 
 
 .PHONY: help
