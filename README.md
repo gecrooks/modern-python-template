@@ -240,20 +240,22 @@ The convention is that the version number of a python packages should be availab
 So we add the following code to `example_python_project/config.py` to extract the version number metadata.
 ```
 
-from .future import importlib_metadata 
+__all__ = ["__version__", "importlib_metadata", "about"]
 
 
-__all__ = ["__version__"]
+# Backwards compatibility imports
+try:
+    # python >= 3.8
+    from importlib import metadata as importlib_metadata  # type: ignore
+except ImportError:  # pragma: no cover
+    import importlib_metadata  # type: ignore  # noqa: F401
 
-
-package_name = "example_python_project"
 
 try:
-    __version__ = importlib_metadata.version(package_name)  # type: ignore
+    __version__ = importlib_metadata.version(__package__)  # type: ignore
 except Exception:  # pragma: no cover
     # package is not installed
-    __version__ = "?.?.?"
-
+    __version__ = "0.0.0"
 
 ```
 and then in `example_python_project/__init__.py`, we import this version number.
@@ -264,16 +266,6 @@ We put the code to extract the version number in `config.py` and not `__init__.p
 
 The various pragmas in the code above ("pragma: no cover" and "type: ignore") are there because the conditional imports confuse both our type checker and code coverage tools.
 
-The `.future` module conditionally imports the `importlib_metadata` package when `metadata` isn't available in python itself.
-```
-__all__ = ["importlib_metadata"]
-
-try:
-    # python >= 3.8
-    from importlib import metadata as importlib_metadata  # type: ignore
-except ImportError:  # pragma: no cover
-    import importlib_metadata  # type: ignore  # noqa: F401
-```
 
 
 ## about
@@ -282,17 +274,19 @@ One of my tricks is to add a function to print the versions of the core upstream
 
 ```
 # Configuration (> python -m example_python_project.about)
-platform                 macOS-10.13.6-x86_64-i386-64bit
-gecrooks-python-template 0.0.1
-python                   3.8.3
-numpy                    1.18.5
-pytest                   5.4.3
-pytest-cov               2.10.0
-flake8                   3.8.3
-mypy                     0.780
-sphinx                   3.1.1
-sphinxcontrib-bibtex     1.0.0
-setuptools_scm           4.1.2
+platform                 macOS-10.16-x86_64-i386-64bit
+example_python_project   0.0.0
+python                   3.8.8
+numpy                    1.20.1
+setuptools_scm           5.0.2
+pytest                   6.2.2
+pytest-cov               2.11.1
+flake8                   6.0.0
+mypy                     0.812
+black                    20.8b1
+isort                    5.7.0
+sphinx                   3.5.1
+pre-commit               2.20.0
 ```
 The `about()` function to print this information is placed in `about_.py`. The file `about.py` contains the standard python command line interface (CLI), 
 ```
@@ -491,6 +485,9 @@ I like to add a Makefile with targets for all of the common development tools I 
 
 ```
 (GTP) $ make
+about        Report versions of dependent packages
+status       git status --short --branch
+init         Install package ready for development
 all          Run all tests
 test         Run unittests
 coverage     Report test coverage
@@ -500,11 +497,11 @@ typecheck    Static typechecking
 docs         Build documentation
 docs-open    Build documentation and open in webbrowser
 docs-clean   Clean documentation build
+docs-github-pages Install html in docs directory ready for github pages
 pragmas      Report all pragmas in code
-about        Report versions of dependent packages
-status       git status -uno
 build        Setuptools build
 clean        Clean up after setuptools
+requirements Make requirements.txt
 ```
 
 The pragmas target searches the code and lists all of the pragmas that occur. Common uses of [pragmas](https://en.wikipedia.org/wiki/Directive_(programming)) are to override the linter, tester, or typechecker. 
@@ -611,8 +608,7 @@ Changes to be committed:
     new file:   example_python_project/__init__.py
     new file:   example_python_project/about.py      
     new file:   example_python_project/config.py
-    new file:   example_python_project/config_test.py
-    new file:   example_python_project/future.py    
+    new file:   example_python_project/config_test.py  
     new file:   setup.cfg
     new file:   setup.py
     
@@ -623,7 +619,12 @@ $ git push --set-upstream origin gec001-init
 ```
 If all goes well Github will see our push, and build and test the code in the branch. Probably all the tests won't pass on the first try. It's easy to forget something (which is why we have automatic tests). So tweak the code, and push another commit until the tests pass.
 
+## Git pre-commit
 
+Another handy trick is to add a (pre-commit](https://ljvmiranda921.github.io/notebook/2018/06/21/precommits-using-black-and-flake8/) hook to git, so that some tests are run before code can be committed.
+A basic example hook to run black before commit is located in `.pre-commit-config.yaml`. The make command `init` 
+will install the pre-commit hook.
+ 
 
 ## PyPi
 
@@ -713,14 +714,16 @@ $ git push
 Assuming everything went well, you can now upload a release to pypi proper. We can add a [github workflow](.github/workflows/python-publish.yml) to automatically upload new releases tagged on github. The only additional configuration is to upload `PYPI_USERNAME` and `PYPI_PASSWORD` to github as secrets (under your repo settings). 
 
 ## Extras: requirements.txt
-The `setup.cfg` file specifies the minimum versions of dependencies.  But for testing and deployment it can be useful to pin the exact 
-versions.
+The `setup.cfg` file specifies the minimum versions of dependencies.  But for testing and deployment it can be useful to pin exact versions.
 
     > pip freeze > requirements.txt
 
 And to install these exact versions:
     
     > pip install -r requirements.txt
+
+If a `requirements.txt` exists then those versions are installed by the github workflows and the `make init` command.
+
 
 ## Extras: MANIFEST.in
 You don't need a [`MANIFEST.in` file](https://www.remarkablyrestrained.com/python-setuptools-manifest-in/).

@@ -12,9 +12,15 @@ import re
 import sys
 import typing
 
-from .future import importlib_metadata
+__all__ = ["__version__", "importlib_metadata", "about"]
 
-__all__ = ["__version__", "about"]
+
+# Backwards compatibility imports
+try:
+    # python >= 3.8
+    from importlib import metadata as importlib_metadata  # type: ignore
+except ImportError:  # pragma: no cover
+    import importlib_metadata  # type: ignore  # noqa: F401
 
 
 try:
