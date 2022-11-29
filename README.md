@@ -240,20 +240,22 @@ The convention is that the version number of a python packages should be availab
 So we add the following code to `example_python_project/config.py` to extract the version number metadata.
 ```
 
-from .future import importlib_metadata 
+__all__ = ["__version__", "importlib_metadata", "about"]
 
 
-__all__ = ["__version__"]
+# Backwards compatibility imports
+try:
+    # python >= 3.8
+    from importlib import metadata as importlib_metadata  # type: ignore
+except ImportError:  # pragma: no cover
+    import importlib_metadata  # type: ignore  # noqa: F401
 
-
-package_name = "example_python_project"
 
 try:
-    __version__ = importlib_metadata.version(package_name)  # type: ignore
+    __version__ = importlib_metadata.version(__package__)  # type: ignore
 except Exception:  # pragma: no cover
     # package is not installed
-    __version__ = "?.?.?"
-
+    __version__ = "0.0.0"
 
 ```
 and then in `example_python_project/__init__.py`, we import this version number.
@@ -264,16 +266,6 @@ We put the code to extract the version number in `config.py` and not `__init__.p
 
 The various pragmas in the code above ("pragma: no cover" and "type: ignore") are there because the conditional imports confuse both our type checker and code coverage tools.
 
-The `.future` module conditionally imports the `importlib_metadata` package when `metadata` isn't available in python itself.
-```
-__all__ = ["importlib_metadata"]
-
-try:
-    # python >= 3.8
-    from importlib import metadata as importlib_metadata  # type: ignore
-except ImportError:  # pragma: no cover
-    import importlib_metadata  # type: ignore  # noqa: F401
-```
 
 
 ## about
@@ -614,8 +606,7 @@ Changes to be committed:
     new file:   example_python_project/__init__.py
     new file:   example_python_project/about.py      
     new file:   example_python_project/config.py
-    new file:   example_python_project/config_test.py
-    new file:   example_python_project/future.py    
+    new file:   example_python_project/config_test.py  
     new file:   setup.cfg
     new file:   setup.py
     
