@@ -10,10 +10,17 @@ FILES = $(NAME) docsrc/conf.py setup.py
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
-install:  ## Install package ready for development
+about:  ## Report versions of dependent packages
+	@python -m $(NAME).about
+
+status:  ## git status --short --branch
+	@git status --short --branch
+
+init:  ## Install package ready for development
 	python -m pip install --upgrade pip
 	if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi         
 	python -m pip install -e .[dev]
+	python -m pre-commit install  # Install git pre-commit hook
 
 all: about coverage lint typecheck docs build   ## Run all tests
 
@@ -50,13 +57,13 @@ docs-open:  ## Build documentation and open in webbrowser
 docs-clean:  ## Clean documentation build
 	(cd docsrc; make clean)
 
-docs-github-pages: docs ## Install html in docs directory ready for github pages
+docs-github-pages: docs  ## Install html in docs directory ready for github pages
 	# https://www.docslikecode.com/articles/github-pages-python-sphinx/
 	@mkdir -p docs
 	@touch docs/.nojekyll  # Tell github raw html, not jekyll
 	@cp -a _build/html/. ../docs
 
-pragmas:	## Report all pragmas in code
+pragmas:  ## Report all pragmas in code
 	@echo "** Test coverage pragmas**"
 	@grep 'pragma: no cover' --color -r -n $(FILES) || echo "No test coverage pragmas"
 	@echo
@@ -67,20 +74,14 @@ pragmas:	## Report all pragmas in code
 	@echo "** Typecheck pragmas **"
 	@grep '# type:' --color -r -n $(FILES) || echo "No typecheck pragmas"
 
-about:	## Report versions of dependent packages
-	@python -m $(NAME).about
-
-status:  ## git status --short --branch
-	@git status --short --branch
-
-build: ## Setuptools build
+build:  ## Setuptools build
 	./setup.py --quiet clean --all
 	./setup.py --quiet sdist bdist_wheel
 
-clean: ## Clean up after setuptools
+clean:  ## Clean up after setuptools
 	./setup.py clean --all
 
-requirements: ## Make requirements.txt
+requirements:  ## Make requirements.txt
 	python -m pip freeze > requirements.txt
 
 

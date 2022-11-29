@@ -491,6 +491,9 @@ I like to add a Makefile with targets for all of the common development tools I 
 
 ```
 (GTP) $ make
+about        Report versions of dependent packages
+status       git status --short --branch
+init         Install package ready for development
 all          Run all tests
 test         Run unittests
 coverage     Report test coverage
@@ -500,11 +503,11 @@ typecheck    Static typechecking
 docs         Build documentation
 docs-open    Build documentation and open in webbrowser
 docs-clean   Clean documentation build
+docs-github-pages Install html in docs directory ready for github pages
 pragmas      Report all pragmas in code
-about        Report versions of dependent packages
-status       git status -uno
 build        Setuptools build
 clean        Clean up after setuptools
+requirements Make requirements.txt
 ```
 
 The pragmas target searches the code and lists all of the pragmas that occur. Common uses of [pragmas](https://en.wikipedia.org/wiki/Directive_(programming)) are to override the linter, tester, or typechecker. 
@@ -623,7 +626,12 @@ $ git push --set-upstream origin gec001-init
 ```
 If all goes well Github will see our push, and build and test the code in the branch. Probably all the tests won't pass on the first try. It's easy to forget something (which is why we have automatic tests). So tweak the code, and push another commit until the tests pass.
 
+## Git pre-commit
 
+Another handy trick is to add a (pre-commit](https://ljvmiranda921.github.io/notebook/2018/06/21/precommits-using-black-and-flake8/) hook to git, so that some tests are run before code can be committed.
+A basic example hook to run black before commit is located in `.pre-commit-config.yaml`. The make command `init` 
+will install the pre-commit hook.
+ 
 
 ## PyPi
 
