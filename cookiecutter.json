@@ -5,7 +5,7 @@
   "author_name": "Some Body",
   "author_email": "somebody@example.com",
   "copywrite": "{% now 'local', '%Y' %}, {{ cookiecutter.author_name }} and contributors",
-  "license": ["Apache-2.0", "MIT"],
+  "license": ["Apache-2.0", "MIT", "None"],
   "github_username": "somebody",
   "initilize_git_repo": "y"
 }

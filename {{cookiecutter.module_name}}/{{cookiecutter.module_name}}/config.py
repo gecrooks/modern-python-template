@@ -12,7 +12,6 @@ import re
 import sys
 import typing
 
-
 __all__ = ["__version__", "importlib_metadata", "about"]
 
 

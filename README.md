@@ -274,17 +274,19 @@ One of my tricks is to add a function to print the versions of the core upstream
 
 ```
 # Configuration (> python -m example_python_project.about)
-platform                 macOS-10.13.6-x86_64-i386-64bit
-gecrooks-python-template 0.0.1
-python                   3.8.3
-numpy                    1.18.5
-pytest                   5.4.3
-pytest-cov               2.10.0
-flake8                   3.8.3
-mypy                     0.780
-sphinx                   3.1.1
-sphinxcontrib-bibtex     1.0.0
-setuptools_scm           4.1.2
+platform                 macOS-10.16-x86_64-i386-64bit
+example_python_project   0.0.0
+python                   3.8.8
+numpy                    1.20.1
+setuptools_scm           5.0.2
+pytest                   6.2.2
+pytest-cov               2.11.1
+flake8                   6.0.0
+mypy                     0.812
+black                    20.8b1
+isort                    5.7.0
+sphinx                   3.5.1
+pre-commit               2.20.0
 ```
 The `about()` function to print this information is placed in `about_.py`. The file `about.py` contains the standard python command line interface (CLI), 
 ```
@@ -712,14 +714,16 @@ $ git push
 Assuming everything went well, you can now upload a release to pypi proper. We can add a [github workflow](.github/workflows/python-publish.yml) to automatically upload new releases tagged on github. The only additional configuration is to upload `PYPI_USERNAME` and `PYPI_PASSWORD` to github as secrets (under your repo settings). 
 
 ## Extras: requirements.txt
-The `setup.cfg` file specifies the minimum versions of dependencies.  But for testing and deployment it can be useful to pin the exact 
-versions.
+The `setup.cfg` file specifies the minimum versions of dependencies.  But for testing and deployment it can be useful to pin exact versions.
 
     > pip freeze > requirements.txt
 
 And to install these exact versions:
     
     > pip install -r requirements.txt
+
+If a `requirements.txt` exists then those versions are installed by the github workflows and the `make init` command.
+
 
 ## Extras: MANIFEST.in
 You don't need a [`MANIFEST.in` file](https://www.remarkablyrestrained.com/python-setuptools-manifest-in/).
