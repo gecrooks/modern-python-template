@@ -625,6 +625,10 @@ Another handy trick is to add a (pre-commit](https://ljvmiranda921.github.io/not
 A basic example hook to run black before commit is located in `.pre-commit-config.yaml`. The make command `init` 
 will install the pre-commit hook.
  
+## Editorconfig
+
+[EditorConfig](https://editorconfig.org/) is a handy way of specifying code formatting conventions, such as indent levels and line endings. The .editorconfig lives in the root of the repository, and is understood by many popular IDEs and ext editors.
+
 
 ## PyPi
 
@@ -767,3 +771,9 @@ I also added some pre- and post- templating hooks (in the `hooks` subdirectory).
 By my count our minimal project has 13 configuration files (In python, toml, yaml, INI, gitignore, Makefile, and plain text formats), 2 documentation files, one file of unit tests, and 3 files of code (containing 31 lines of code). 
 
 We're now ready to create a new git branch and start coding in earnest.
+
+
+## Further reading
+
+* [Boring Python: dependency management, by James Bennett](https://www.b-list.org/weblog/2022/may/13/boring-python-dependencies/)
+* [Boring Python: code quality, by James Bennett](https://www.b-list.org/weblog/2022/dec/19/boring-python-code-quality/)
