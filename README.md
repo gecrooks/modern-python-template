@@ -170,12 +170,12 @@ classifiers=
     Intended Audience :: Science/Research
     Programming Language :: Python
     Natural Language :: English
-    Operating System :: OS Independent    
+    Operating System :: OS Independent
     Programming Language :: Python :: 3
-    Programming Language :: Python :: 3.7    
     Programming Language :: Python :: 3.8
     Programming Language :: Python :: 3.9
-    Programming Language :: Python :: 3.10    
+    Programming Language :: Python :: 3.10
+    Programming Language :: Python :: 3.11
     Topic :: Scientific/Engineering
     Topic :: Software Development
     Topic :: Software Development :: Libraries
@@ -185,15 +185,14 @@ classifiers=
 
 [options]
 zip_safe = True
-python_requires = >= 3.7
+python_requires = >= 3.8
 packages = find:
 
 install_requires =
-    importlib_metadata      ; python_version < "3.8"   # PEP508 environment marker
     numpy
 
 setup_requires =
-  setuptools_scm
+    setuptools_scm
 
 
 [options.extras_require]
@@ -218,7 +217,7 @@ that in the long run the metadata moves to `pyproject.toml` and follows a differ
 
 It's good practice to support at least two consecutive versions of python. Starting with 3.9, python is moving to an annual [release schedule](https://www.python.org/dev/peps/pep-0602/). The initial 3.x.0 release will be in early October and the first bug patch 3.x.1 in early December, second in February, and so on.  Since it takes many important packages some time to upgrade (e.g. numpy and tensorflow are often bottlenecks), one should probably plan to upgrade python support around the beginning of each year. Upgrading involves changing the python version numbers in the workflow tests and `config.cfg`, and then cleaning up any `__future__` or conditional imports, or other hacks added to maintain compatibility with older python releases. If you protected the master branch on github, and added required status checks, you'll need to update those too.
 
-Supporting older python versions is often a good idea, if you don't need the newest wizz-bang python features. We'll support python3.7 onwards for now (Since Google's colab currently defaults to 3.7 (Oct 2021)).
+Supporting older python versions is often a good idea, if you don't need the newest wizz-bang python features. We'll default to supporting python 3.8 onwards for now (Since Google's colab currently defaults to 3.8 (Dec 2022)).
 
 
 We can now install our package (as editable -e, so that the code in our repo is live).
@@ -552,7 +551,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.8', '3.9', '3.10', '3.11']
 
     steps:
     - uses: actions/checkout@v2
