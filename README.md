@@ -170,12 +170,12 @@ classifiers=
     Intended Audience :: Science/Research
     Programming Language :: Python
     Natural Language :: English
-    Operating System :: OS Independent    
+    Operating System :: OS Independent
     Programming Language :: Python :: 3
-    Programming Language :: Python :: 3.7    
     Programming Language :: Python :: 3.8
     Programming Language :: Python :: 3.9
-    Programming Language :: Python :: 3.10    
+    Programming Language :: Python :: 3.10
+    Programming Language :: Python :: 3.11
     Topic :: Scientific/Engineering
     Topic :: Software Development
     Topic :: Software Development :: Libraries
@@ -185,15 +185,14 @@ classifiers=
 
 [options]
 zip_safe = True
-python_requires = >= 3.7
+python_requires = >= 3.8
 packages = find:
 
 install_requires =
-    importlib_metadata      ; python_version < "3.8"   # PEP508 environment marker
     numpy
 
 setup_requires =
-  setuptools_scm
+    setuptools_scm
 
 
 [options.extras_require]
@@ -218,7 +217,7 @@ that in the long run the metadata moves to `pyproject.toml` and follows a differ
 
 It's good practice to support at least two consecutive versions of python. Starting with 3.9, python is moving to an annual [release schedule](https://www.python.org/dev/peps/pep-0602/). The initial 3.x.0 release will be in early October and the first bug patch 3.x.1 in early December, second in February, and so on.  Since it takes many important packages some time to upgrade (e.g. numpy and tensorflow are often bottlenecks), one should probably plan to upgrade python support around the beginning of each year. Upgrading involves changing the python version numbers in the workflow tests and `config.cfg`, and then cleaning up any `__future__` or conditional imports, or other hacks added to maintain compatibility with older python releases. If you protected the master branch on github, and added required status checks, you'll need to update those too.
 
-Supporting older python versions is often a good idea, if you don't need the newest wizz-bang python features. We'll support python3.7 onwards for now (Since Google's colab currently defaults to 3.7 (Oct 2021)).
+Supporting older python versions is often a good idea, if you don't need the newest wizz-bang python features. We'll default to supporting python 3.8 onwards for now (Since Google's colab currently defaults to 3.8 (Dec 2022)).
 
 
 We can now install our package (as editable -e, so that the code in our repo is live).
@@ -552,7 +551,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.8', '3.9', '3.10', '3.11']
 
     steps:
     - uses: actions/checkout@v2
@@ -625,6 +624,10 @@ Another handy trick is to add a (pre-commit](https://ljvmiranda921.github.io/not
 A basic example hook to run black before commit is located in `.pre-commit-config.yaml`. The make command `init` 
 will install the pre-commit hook.
  
+## Editorconfig
+
+[EditorConfig](https://editorconfig.org/) is a handy way of specifying code formatting conventions, such as indent levels and line endings. The .editorconfig lives in the root of the repository, and is understood by many popular IDEs and ext editors.
+
 
 ## PyPi
 
@@ -767,3 +770,9 @@ I also added some pre- and post- templating hooks (in the `hooks` subdirectory).
 By my count our minimal project has 13 configuration files (In python, toml, yaml, INI, gitignore, Makefile, and plain text formats), 2 documentation files, one file of unit tests, and 3 files of code (containing 31 lines of code). 
 
 We're now ready to create a new git branch and start coding in earnest.
+
+
+## Further reading
+
+* [Boring Python: dependency management, by James Bennett](https://www.b-list.org/weblog/2022/may/13/boring-python-dependencies/)
+* [Boring Python: code quality, by James Bennett](https://www.b-list.org/weblog/2022/dec/19/boring-python-code-quality/)

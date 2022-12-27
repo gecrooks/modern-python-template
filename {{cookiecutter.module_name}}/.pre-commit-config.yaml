@@ -1,10 +1,17 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
--   repo: https://github.com/psf/black
-    rev: 22.6.0
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
     hooks:
-    -   id: black   
+    -   id: check-added-large-files
+    -   id: fix-byte-order-marker
+    -   id: check-case-conflict
+    -   id: end-of-file-fixer
+    -   id: requirements-txt-fixer
+    -   id: no-commit-to-branch
+-   repo: https://github.com/psf/black
+    rev: 22.12.0
+    hooks:
+    -   id: black
         language_version: python3
-
-
