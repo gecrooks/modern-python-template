@@ -20,6 +20,5 @@ def git_init_and_tag():
 
 
 if __name__ == "__main__":
-
     if "{{ cookiecutter.initilize_git_repo }}" in ["y", "Y"]:
         git_init_and_tag()
