@@ -1,9 +1,9 @@
-# gecrooks-python-template: How to setup an open source, github hosted, python package
+# modern-python-template: How to setup an open source, github hosted, python package
 
 
-![Build Status](https://github.com/gecrooks/gecrooks-python-template/workflows/Build/badge.svg) 
+![Build Status](https://github.com/gecrooks/modern-python-template/workflows/Build/badge.svg) 
 
-[Source](https://github.com/gecrooks/gecrooks-python-template)
+[Source](https://github.com/gecrooks/modern-python-template)
 
 ## Quickstart
 
@@ -11,7 +11,7 @@ This is a [cookiecutter](https://github.com/cookiecutter/cookiecutter) python te
 Install and run cookiecutter, answer the configuration questions, and you should be good to go.
 
     pip install -U cookiecutter
-    cookiecutter https://github.com/gecrooks/gecrooks-python-template.git
+    cookiecutter https://github.com/gecrooks/modern-python-template.git
 
 To complete github setup, create a new empty repo on github with the same name, add origin to our
 project, and push to github.
@@ -66,17 +66,17 @@ On our local machine the first thing we do is create a new conda environment. (Y
 Now we clone the repo locally.
 
 ```
-    (GPT) $ git clone https://github.com/gecrooks/gecrooks-python-template.git
-    Cloning into 'gecrooks-python-template'...
+    (GPT) $ git clone https://github.com/gecrooks/modern-python-template.git
+    Cloning into 'modern-python-template'...
     remote: Enumerating objects: 4, done.
     remote: Counting objects: 100% (4/4), done.
     remote: Compressing objects: 100% (3/3), done.
     remote: Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
     Unpacking objects: 100% (4/4), done.
-    (GPT) $ cd gecrooks-python-template
+    (GPT) $ cd modern-python-template
 ```
 
-Lets tag this initial commit for posterities sake (And so I can [link](https://github.com/gecrooks/gecrooks-python-template/releases/tag/v0.0.0) to the code at this instance).
+Lets tag this initial commit for posterities sake (And so I can [link](https://github.com/gecrooks/modern-python-template/releases/tag/v0.0.0) to the code at this instance).
 ```
   (GPT) $ git tag v0.0.0
   (GPT) $ git push origin v0.0.0
@@ -145,7 +145,7 @@ All of the rest of the metadata goes in `setup.cfg` (in INI format).
 # [INI](https://docs.python.org/3/install/index.html#inst-config-syntax) file format.
 #
 # Project cut from gecrooks_python_template cookiecutter template
-# https://github.com/gecrooks/gecrooks-python-template
+# https://github.com/gecrooks/modern-python-template
 
 
 [metadata]
@@ -651,7 +651,7 @@ Let's make sure it worked by installing from pypi into a fresh conda environment
 (GTP) $ conda deactivate
 $ conda create --name tmp
 $ conda activate tmp
-(tmp) $ pip install --index-url https://test.pypi.org/simple/ --no-deps gecrooks-python-template
+(tmp) $ pip install --index-url https://test.pypi.org/simple/ --no-deps modern-python-template
 (tmp) $ python -m example_python_project.about
 (tmp) $ conda activate GTP
 ```
@@ -739,7 +739,7 @@ Having shorted out our basic module configuration and layout, the next trick is 
 just a few moments.
 
     pip install -U cookiecutter
-    cookiecutter https://github.com/gecrooks/gecrooks-python-template.git
+    cookiecutter https://github.com/gecrooks/modern-python-template.git
   
 Answer the questions, create a new empty repo on github with the same name, push, and you should be good to go.
 
