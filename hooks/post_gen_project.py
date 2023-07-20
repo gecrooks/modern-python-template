@@ -9,7 +9,7 @@ def git_init_and_tag():
     subprocess.check_output("git init", shell=True, stderr=subprocess.STDOUT)
     subprocess.check_output("git add -A .", shell=True, stderr=subprocess.STDOUT)
     subprocess.check_output(
-        f"git commit -m 'Initialize from gecrooks-python-template'",
+        f"git commit -m 'Initialize from modern-python-template'",
         shell=True,
         stderr=subprocess.STDOUT,
     )
