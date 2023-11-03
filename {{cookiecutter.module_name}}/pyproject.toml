@@ -1,9 +1,25 @@
-# pyproject.toml
+
 [build-system]
-requires = ["setuptools>=42", "wheel", "setuptools_scm[toml]>=3.4"]
 build-backend = "setuptools.build_meta"
+requires = ["setuptools>=67.0", "setuptools_scm[toml]>=7.1"]
 
 
-# pyproject.toml
 [tool.setuptools_scm]
+fallback_version = "0.0.0-dev"
+# write_to = "{{cookiecutter.module_name}}/_version.py"
 
+
+
+[tool.isort]
+
+# Make isort compatible with black
+profile = "black"
+
+
+[tools.black]
+
+# Standard black line length is 88
+line-length = 88  
+
+# Python versions that should be supported by Black's output
+target-version = ['py38', 'py39', 'py310', 'py311']

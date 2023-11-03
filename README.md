@@ -496,7 +496,6 @@ docs-clean   Clean documentation build
 docs-github-pages Install html in docs directory ready for github pages
 pragmas      Report all pragmas in code
 build        Setuptools build
-clean        Clean up after setuptools
 requirements Make requirements.txt
 ```
 
@@ -632,10 +631,10 @@ We should now be ready to do a test submission to PyPI, The Python Package Index
 Follow the directions laid out in the [python packaging](https://packaging.python.org/tutorials/packaging-projects/) documentation.
 
 ```
-$ pip install -q wheel setuptools twine
+$ pip install -q build twine
 ...
 $ git tag v0.1.0rc1
-$ python setup.py sdist bdist_wheel 
+$ python -m build 
 ...
 ```
 We tag our release candidate so that we get a clean version number (pypi will object to the development version numbers setuptools_scm generates if the tag or git repo isn't up to date).
