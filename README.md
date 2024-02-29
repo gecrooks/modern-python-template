@@ -5,6 +5,13 @@
 
 [Source](https://github.com/gecrooks/modern-python-template)
 
+## History
+
+### v3 2024-02-28
+* Move all project configuration into pyproject.toml (and remove the legacy setup.cfg and setup.py files)
+* Replace isort, black, and flake8 with ruff
+
+
 ## Quickstart
 
 This is a [cookiecutter](https://github.com/cookiecutter/cookiecutter) python template for a minimal python package. 
