@@ -24,7 +24,7 @@ except Exception:  # pragma: no cover
 
 
 # NB: command line access is located in about.py
-def about(file: typing.TextIO = None) -> None:
+def about(file: typing.Optional[typing.TextIO] = None) -> None:
     f"""Print information about this package.
 
      ``> python -m {__package__}.about``
@@ -58,3 +58,4 @@ def about(file: typing.TextIO = None) -> None:
 
 
 # end about
+

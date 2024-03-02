@@ -1,4 +1,4 @@
-# Copyright 2023, Some Body and contributors
+# Copyright 2024, Some Body and contributors
 #
 # This source code is licensed under the Apache-2.0 License
 # found in the LICENSE file in the root directory of this source tree.
@@ -24,7 +24,7 @@ except Exception:  # pragma: no cover
 
 
 # NB: command line access is located in about.py
-def about(file: typing.TextIO = None) -> None:
+def about(file: typing.Optional[typing.TextIO] = None) -> None:
     f"""Print information about this package.
 
      ``> python -m {__package__}.about``
@@ -58,3 +58,4 @@ def about(file: typing.TextIO = None) -> None:
 
 
 # end about
+

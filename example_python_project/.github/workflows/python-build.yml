@@ -32,17 +32,13 @@ jobs:
         python -m pip install .[dev]  # install package + test dependencies
     - name: About
       run: |
-        python -m $(python -Wi setup.py --name).about
+        python -m example_python_project.about
     - name: Test with pytest
       run: |
         python -m pytest --cov-fail-under 100
-    - name: Lint with black and isort (run `make delint` to fix issues)
+    - name: Lint with ruff
       run: |
-        python -m black --check .
-        python -m isort --check .
-    - name: Lint with flake8
-      run: |
-        python -m flake8 .
+        python -m ruff check .
     - name: Typecheck with mypy
       run: |
         python -m mypy

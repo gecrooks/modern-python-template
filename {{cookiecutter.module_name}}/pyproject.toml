@@ -1,7 +1,71 @@
 
+
+# https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#writing-pyproject-toml
+
+
 [build-system]
 build-backend = "setuptools.build_meta"
 requires = ["setuptools>=67.0", "setuptools_scm[toml]>=7.1"]
+
+
+[project]
+name = "{{cookiecutter.module_name}}"
+dynamic = ["version"]
+dependencies = [
+    "numpy",
+]
+requires-python =">=3.9"
+
+authors = [
+  {name = "{{cookiecutter.author_name}}", email = "{{cookiecutter.author_email}}"},
+  # {name = "Another person"}, {email = "different.person@example.com"},
+]
+maintainers = [
+  # {name = "Another person"}, {email = "different.person@example.com"},
+]
+description = "{{cookiecutter.short_description}}"
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = []
+classifiers = [ 
+  # Full List: https://pypi.org/classifiers/
+  
+  # How mature is this project? Common values are
+  #   3 - Alpha
+  #   4 - Beta
+  #   5 - Production/Stable
+  "Development Status :: 4 - Beta",
+
+  # Indicate who your project is intended for
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Build Tools",
+
+  # Pick your license as you wish (see also "license" above)
+  # "License :: OSI Approved :: MIT License",
+  # "License :: OSI Approved :: Apache Software License",
+]
+
+[project.urls]
+Homepage = "https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.module_name}}/"
+# Documentation = "https://readthedocs.org"
+# Repository = "https://github.com/me/spam.git"
+# Issues = "https://github.com/me/spam/issues"
+# Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
+
+
+[project.optional-dependencies]
+dev = [
+    "setuptools_scm",
+    "pytest",
+    "pytest-cov",
+    "mypy",
+    "sphinx",
+    "pre-commit",
+]
+
+
+[tool.setuptools]
+packages = ["{{cookiecutter.module_name}}"]
 
 
 [tool.setuptools_scm]
@@ -9,17 +73,53 @@ fallback_version = "0.0.0-dev"
 # write_to = "{{cookiecutter.module_name}}/_version.py"
 
 
+[tools.ruff]
+# https://docs.astral.sh/ruff/configuration/
+line-length = 88
+indent-width = 4
 
-[tool.isort]
+[tool.ruff.lint]
+ignore = []
 
-# Make isort compatible with black
-profile = "black"
+[tool.ruff.lint.per-file-ignores]
+# Don't complaine about unused imports in __init__.py
+"__init__.py" = ["F401", "F403"]
 
 
-[tools.black]
+# pytest configuration
+# https://docs.pytest.org/en/7.2.x/reference/customize.html
 
-# Standard black line length is 88
-line-length = 88  
+[tool.pytest.ini_options]
+testpaths = "{{cookiecutter.module_name}}"
 
-# Python versions that should be supported by Black's output
-target-version = ['py38', 'py39', 'py310', 'py311']
+
+
+[tool.coverage.run]
+branch = true
+source = ["{{cookiecutter.module_name}}"]
+parallel = true
+
+[tool.coverage.report]
+omit = ['*_test.py']
+exclude_lines = [
+  '\#\s*pragma: no cover',
+  '^\s*raise AssertionError\b',
+  '^\s*raise NotImplementedError\b',
+  '^\s*return NotImplemented\b',
+  '^\s*raise$',
+  '^assert False\b',
+  '''^if __name__ == ['"]__main__['"]:$''',
+]
+
+
+# mypy typecheck configuration
+# https://mypy.readthedocs.io/en/stable/config_file.html
+
+# [tools.mypy]
+files = "{{cookiecutter.module_name}}"
+
+# Suppresses error about unresolved imports (i.e. from numpy)
+gnore_missing_imports = true
+
+# Disallows functions without type annotations#
+disallow_untyped_defs = true

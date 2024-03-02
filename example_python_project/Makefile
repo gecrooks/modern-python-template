@@ -39,22 +39,17 @@ test:  ## Run unittests
 .PHONY: coverage
 coverage:  ## Report test coverage
 	@echo
-	python -m pytest --disable-pytest-warnings --cov $(NAME)
+	python -m pytest --disable-pytest-warnings --cov-report term-missing --cov $(NAME)
 	@echo
 
 .PHONY: lint
 lint:  ## Lint check python source
-	@python -m isort --check $(NAME)  ||  echo "isort:   FAILED!"
-	@python -m black --check --quiet $(NAME)    || echo "black:   FAILED!"
-	@python -m flake8 $(FILES)
+	@python -m ruff check 
 
 .PHONY: delint
-delint:  ## Run isort and black to delint project
+delint:
 	@echo	
-	python -m isort $(NAME)
-	@echo
-	python -m black $(NAME)
-	@echo
+	python -m ruff format
 
 .PHONY: typecheck
 typecheck:  ## Static typechecking 
