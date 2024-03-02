@@ -39,7 +39,6 @@ jobs:
     - name: Lint with ruff
       run: |
         python -m ruff check .
-        python -m isort --check .
     - name: Typecheck with mypy
       run: |
         python -m mypy
