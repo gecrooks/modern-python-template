@@ -49,12 +49,7 @@ jobs:
         python -m pytest --cov --cov-fail-under 100 
     - name: Lint with black and isort (run `make delint` to fix issues)
       run: |
-        python -m black --check example_python_project hooks
-        python -m isort --check example_python_project hooks
-    - name: Lint with flake8
-      run: |
-        cd example_python_project
-        python -m flake8 .            
+        python -m ruff check example_python_project hooks        
     - name: Typecheck with mypy
       run: |
         cd example_python_project 
