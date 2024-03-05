@@ -38,7 +38,7 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi  
         cd example_python_project       
-        python -m pip install .[dev]  # install package + test dependencies
+        python -m pip install ".[dev]"  # install package + test dependencies
     - name: About
       run: |
         cd example_python_project 
@@ -47,7 +47,7 @@ jobs:
       run: |
         cd example_python_project 
         python -m pytest --cov --cov-fail-under 100 
-    - name: Lint with black and isort (run `make delint` to fix issues)
+    - name: Lint ruff
       run: |
         python -m ruff check example_python_project hooks        
     - name: Typecheck with mypy
