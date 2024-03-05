@@ -4,11 +4,13 @@ name: Build
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
   schedule:
     - cron: "0 13 * * *"  # Every day at 1pm UTC (6am PST)
+  workflow_dispatch:
+
 
 jobs:
   build:
@@ -36,7 +38,7 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi  
         cd example_python_project       
-        python -m pip install .[dev]  # install package + test dependencies
+        python -m pip install ".[dev]"  # install package + test dependencies
     - name: About
       run: |
         cd example_python_project 
@@ -45,18 +47,13 @@ jobs:
       run: |
         cd example_python_project 
         python -m pytest --cov --cov-fail-under 100 
-    - name: Lint with black and isort (run `make delint` to fix issues)
+    - name: Lint ruff
       run: |
-        python -m black --check example_python_project hooks
-        python -m isort --check example_python_project hooks
-    - name: Lint with flake8
-      run: |
-        cd example_python_project
-        python -m flake8 .            
+        python -m ruff check example_python_project hooks        
     - name: Typecheck with mypy
       run: |
         cd example_python_project 
-        python -m mypy
+        python -m mypy example_python_project 
     - name: Build documentation with sphinx
       run: |
         cd example_python_project
