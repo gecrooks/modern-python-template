@@ -53,7 +53,7 @@ jobs:
     - name: Typecheck with mypy
       run: |
         cd example_python_project 
-        python -m mypy
+        python -m mypy example_python_project 
     - name: Build documentation with sphinx
       run: |
         cd example_python_project
