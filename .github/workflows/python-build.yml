@@ -40,7 +40,7 @@ jobs:
     - name: About
       run: |
         cd example_python_project 
-        python -m $(python -Wi setup.py --name).about
+        python -m example_python_project.about
     - name: Test with pytest
       run: |
         cd example_python_project 
