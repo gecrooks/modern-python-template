@@ -14,7 +14,7 @@ dynamic = ["version"]
 dependencies = [
     "numpy",
 ]
-requires-python =">=3.9"
+requires-python =">=3.11"
 
 authors = [
   {name = "Some Body", email = "somebody@example.com"},
@@ -74,7 +74,7 @@ fallback_version = "0.0.0-dev"
 # write_to = "example_python_project/_version.py"
 
 
-[tools.ruff]
+[tool.ruff]
 # https://docs.astral.sh/ruff/configuration/
 line-length = 88
 indent-width = 4
@@ -116,11 +116,11 @@ exclude_lines = [
 # mypy typecheck configuration
 # https://mypy.readthedocs.io/en/stable/config_file.html
 
-# [tools.mypy]
+[tool.mypy]
 files = "example_python_project"
 
 # Suppresses error about unresolved imports (i.e. from numpy)
-gnore_missing_imports = true
+ignore_missing_imports = true
 
-# Disallows functions without type annotations#
+# Disallows functions without type annotations
 disallow_untyped_defs = true
