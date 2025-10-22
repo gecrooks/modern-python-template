@@ -1,5 +1,8 @@
 # modern-python-template: How to setup an open source, github hosted, python package
 
+2025-10: The meta on how to setup a python project has changed again, and this example is now out of date. Just use uv.
+
+
 
 ![Build Status](https://github.com/gecrooks/modern-python-template/workflows/Build/badge.svg) 
 
